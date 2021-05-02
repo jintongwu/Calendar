@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.List;
 
 public interface ICalendarApp {
     
@@ -13,7 +14,7 @@ public interface ICalendarApp {
     public void calendarInit();
     
     /**
-     * Create a user for this application
+     * Create an user calendar for this application
      * @param userName
      * @return The reference to the user created
      */
@@ -21,11 +22,22 @@ public interface ICalendarApp {
     
     
     /**
-     * Delete a user from this application
+     * Delete an user calendar from this application
      * @param id 
      * @param userName
      */
     public void deleteUser(int id, String userName);
+    
+    
+    /**
+     * find a common meeting time for a list of user
+     * given a a time frame from startTime to endTime
+     * @param startTime
+     * @param endTime
+     * @param users
+     * @return a list of calendar array, each array contains start time and end time
+     */
+    public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime, List<IUser> users);
     
 
 }
