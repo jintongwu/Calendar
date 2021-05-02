@@ -50,4 +50,20 @@ public interface IUser {
      */
     public IEvent nextEvent();
 
+    
+    /**
+     * Print a day frame view of a user calendar, 
+     * starting from 12am of the specified date
+     * @param startDate
+     * @param userID
+     */
+    public void viewCalendarByDay(Calendar startDate, int userID);
+    
+    /**
+     * Print a week frame view of a user calendar, 
+     * starting from the first of the specified date
+     * @param startDate
+     * @param userID
+     */
+    public void viewCalendarByWeek(Calendar startDate, int userID);
 }
