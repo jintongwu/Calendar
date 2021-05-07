@@ -57,5 +57,8 @@ public interface IEvent {
      *         input is not valid
      */
     public boolean changeDuration(int hours, int mins);
-
+    
+    public Calendar getStartTime();
+    
+    public Calendar getEndTime();
 }

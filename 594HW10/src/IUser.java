@@ -66,4 +66,10 @@ public interface IUser {
      * @param userID
      */
     public void viewCalendarByWeek(Calendar startDate, int userID);
+    
+    /*
+     * get a list of free time of this user
+     */
+    public List<Calendar[]> getFreeTime(Calendar startTime, Calendar endTime);
+
 }

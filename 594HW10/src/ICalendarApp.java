@@ -28,18 +28,18 @@ public interface ICalendarApp {
     /**
      * Create an user calendar for this application
      * 
-     * @param userName
-     * @return The reference to the user created
+     * @param the user that is to be added to the calendar app
+     * @return whether this user is added successfully
      */
-    public IUser createUser(String userName);
+    public boolean addUser(IUser user);
 
     /**
      * Delete an user calendar from this application
      * 
      * @param id
-     * @param userName
+     * @return whether this user is deleted successfully
      */
-    public void deleteUser(int id, String userName);
+    public boolean deleteUser(int id);
 
     /**
      * find a common meeting time for a list of user given a a time frame from
