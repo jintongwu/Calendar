@@ -31,7 +31,7 @@ public interface ICalendarApp {
      * @param the user that is to be added to the calendar app
      * @return whether this user is added successfully
      */
-    public boolean addUser(IUser user);
+    public boolean addUser(IUser user, int id);
 
     /**
      * Delete an user calendar from this application
@@ -40,6 +40,8 @@ public interface ICalendarApp {
      * @return whether this user is deleted successfully
      */
     public boolean deleteUser(int id);
+    
+    public List<Calendar[]> findOverlap(List<Calendar[]> c1, List<Calendar[]> c2);
 
     /**
      * find a common meeting time for a list of user given a a time frame from
