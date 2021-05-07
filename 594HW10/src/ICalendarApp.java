@@ -16,6 +16,7 @@ public interface ICalendarApp {
     // Scanner for user input in console
 
     // TODO:
+    
     // Shuke: Implement CalendarApp
     // Jintong: Implement User + Event
 
