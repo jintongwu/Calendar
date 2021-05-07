@@ -35,7 +35,7 @@ public interface ICalendarApp {
      * @param the user that is to be added to the calendar app
      * @return whether this user is added successfully
      */
-    public boolean addUser(IUser user, int id);
+    public IUser addUser(String name, int id);
 
     /**
      * Delete an user calendar from this application

@@ -73,13 +73,28 @@ public interface IUser extends Comparable<IUser> {
     public int getUserID();
 
 
-    public void addStartConstraint(Calendar startConstraint);
+    public void editStartConstraint(int startConstraint);
 
-    public void addEndConstraint(Calendar endConstraint);
+    public void editEndConstraint(int endConstraint);
 
     public List<IEvent> getEvents();
-    /*
-     * get a list of free time of this user
+    
+    
+    /**
+     * get all the free time the user has, which is any time the user
+     * does not have an event
+     * @param startTime
+     * @param endTime
+     * @return a list of calendar pairs or start and end times
      */
-    public List<Calendar[]> getFreeTime(Calendar startTime, Calendar endTime);
+    public List<Calendar[]> getAllFreeTime(Calendar startTime, Calendar endTime);
+    
+    /**
+     * get all the available time, taking into consideration the time
+     * constraints the user set
+     * @param a list of free time
+     * @return a list of available time
+     */
+    
+    public List<Calendar[]> getAvailableTime(List<Calendar[]> l);
 }

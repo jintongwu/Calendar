@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,11 +8,21 @@ public class User implements IUser {
     protected List<IEvent> events;
     protected Integer userID;
     protected String userName;
+    protected int constraintStart;
+    protected int constraintEnd;
 
     public User (String name, int id) {
         this.userName = name;
         this.userID = id;
         userInit();
+    }
+    
+    public User (String name, int id, int constraintStart, int constraintEnd) {
+        this.userName = name;
+        this.userID = id;
+        userInit();
+        this.constraintStart = constraintStart;
+        this.constraintEnd = constraintEnd;
     }
 
     @Override
@@ -113,14 +124,14 @@ public class User implements IUser {
     }
 
     @Override
-    public void addStartConstraint(Calendar startConstraint) {
-        // TODO Auto-generated method stub
+    public void editStartConstraint(int startConstraint) {
+        this.constraintStart = startConstraint;
 
     }
 
     @Override
-    public void addEndConstraint(Calendar endConstraint) {
-        // TODO Auto-generated method stub
+    public void editEndConstraint(int endConstraint) {
+        this.constraintEnd = endConstraint;
 
     }
 
@@ -130,7 +141,7 @@ public class User implements IUser {
     }
 
     @Override
-    public List<Calendar[]> getFreeTime(Calendar startTime, Calendar endTime) {
+    public List<Calendar[]> getAllFreeTime(Calendar startTime, Calendar endTime) {
         // if the start time is after the end time or list of users is empty, return null
         if (startTime.after(endTime)) {
             return null;
@@ -174,8 +185,34 @@ public class User implements IUser {
             currIndex++;
             nextIndex++;
         }
-
         return list;
+    }
+    
+    @Override
+    public List<Calendar[]> getAvailableTime(List<Calendar[]> l) {
+        for (int i = 0; i < l.size(); i++) {
+            // get the start and end hour of the i calendar pair
+            int startHour = l.get(i)[0].get(Calendar.HOUR_OF_DAY);
+            int endHour = l.get(i)[1].get(Calendar.HOUR_OF_DAY);
+            
+            // check if start time and end time of the slot are in constraint bounds
+            boolean startInBound = startHour >= this.constraintStart && startHour < this.constraintEnd;
+            boolean endInBound = endHour >= this.constraintStart && endHour < this.constraintEnd;
+            
+            if (startInBound == false && endInBound == false) { // if either is in bound, remove slot
+                l.remove(i);
+            } else if (startInBound == true && endInBound == false) { // if start is in bound, reset end time
+                l.get(i)[1].set(Calendar.HOUR_OF_DAY, this.constraintEnd);
+                l.get(i)[1].set(Calendar.MINUTE, 0);
+                l.get(i)[1].set(Calendar.SECOND, 0);
+            } else if (startInBound == false && endInBound == true) { // if end is in bound, reset start time
+                l.get(i)[0].set(Calendar.HOUR_OF_DAY, this.constraintStart);
+                l.get(i)[0].set(Calendar.MINUTE, 0);
+                l.get(i)[0].set(Calendar.SECOND, 0);
+            }
+        }
+        return l;
+        
     }
 
 }

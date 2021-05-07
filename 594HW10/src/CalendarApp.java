@@ -14,16 +14,9 @@ public class CalendarApp implements ICalendarApp {
     }
 
     @Override
-    public boolean addUser(IUser user, int id) {
-        // check if the user is already in the list of users
-        if (users.contains(user)) {
-            return false;
-        }
-        // if not add the user into the list and assign id
-        user.setUserID(nextAvailID);
-        this.nextAvailID++;
-        users.add(user);
-        return true;
+    public IUser addUser(String name, int id) {
+        IUser user = new User(name, id);
+        return user;
     }
 
     @Override
@@ -85,9 +78,12 @@ public class CalendarApp implements ICalendarApp {
         if (users.isEmpty()) {
             return null;
         }
-        List<Calendar[]> list = users.get(0).getFreeTime(startTime, endTime);
+        List<Calendar[]> fullList = users.get(0).getAllFreeTime(startTime, endTime);
+        List<Calendar[]> list = users.get(0).getAvailableTime(fullList);
         for (int i = 1; i < users.size(); i++) {
-            list = this.findOverlap(list, users.get(i).getFreeTime(startTime, endTime));
+            List<Calendar[]> fullList2 = users.get(i).getAllFreeTime(startTime, endTime);
+            List<Calendar[]> list2 = users.get(i).getAvailableTime(fullList2);
+            list = this.findOverlap(list, list2);
             if (list.isEmpty()) {
                 break;
             }
