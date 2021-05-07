@@ -1,6 +1,6 @@
 import java.util.*;
 
-public interface IEvent {
+public interface IEvent extends Comparable<IEvent> {
     // field
     // String eventName
     // String description
@@ -12,17 +12,17 @@ public interface IEvent {
      * Change the short name of the event
      * 
      * @param name
-     * @return true if the edit is successfully, false if error has occurred
+     * @return
      */
-    public boolean editEventName(String name);
+    public void editEventName(String name);
 
     /**
      * Change the long description of the event
      * 
      * @param description
-     * @return true if the edit is successfully, false if error has occurred
+     * @return 
      */
-    public boolean editDescription(String description);
+    public void editDescription(String description);
 
     /**
      * Get the list of attendee of the event
@@ -57,5 +57,14 @@ public interface IEvent {
      *         input is not valid
      */
     public boolean changeDuration(int hours, int mins);
+    
+
+    public Calendar getStartTime();
+
+    public Calendar getEndTime();
+    
+    public String getEventName();
+
+    public boolean editEvent(String editField, Object editResult);
 
 }

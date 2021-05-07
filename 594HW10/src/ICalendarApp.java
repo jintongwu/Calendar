@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public interface ICalendarApp {
@@ -7,6 +8,9 @@ public interface ICalendarApp {
     // List<IUser> users
     // Integer nextAvailID
     // Calendar currTime
+    
+    final static Calendar MINCAL = new GregorianCalendar(2000, 0, 1, 0, 0);
+    final static Calendar MAXCAL = new GregorianCalendar(2100, 11, 31, 23, 59);
 
     // TODO: Eric Suggestions
     // Read calendar automatically

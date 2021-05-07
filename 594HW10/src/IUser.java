@@ -1,6 +1,6 @@
 import java.util.*;
 
-public interface IUser {
+public interface IUser extends Comparable<IUser> {
 
     // field:
     // List<IEvent> events
@@ -24,17 +24,15 @@ public interface IUser {
      * @param startTime
      * @return successful in adding event?
      */
-    public boolean addEvent(String startTime, String endTime, String eventName, List<Integer> listAtendees);
-
+    public boolean addEvent(String startTime, String endTime, String eventName, List<Integer> listAttendees);
+    
     /**
      * Enable user to delete an event identified by name return true if the event is
      * successfully deleted false if the event name does not exist
      * 
-     * @param editField
-     * @param editResult
      * @return successful in deleting event?
      */
-    public boolean deleteEvent(String editField, Object editResult);
+    public boolean deleteEvent(String eventName);
 
     /**
      * Enable user to print an event including: the event name, date, day of week,
@@ -66,4 +64,18 @@ public interface IUser {
      * @param userID
      */
     public void viewCalendarByWeek(Calendar startDate, int userID);
+    
+    /**
+     * Return the UserId
+     * @param id
+     * @return
+     */
+    public int getUserID();
+    
+    
+    public void addStartConstraint(Calendar startConstraint);
+    
+    public void addEndConstraint(Calendar endConstraint);
+    
+    public List<IEvent> getEvents();
 }
