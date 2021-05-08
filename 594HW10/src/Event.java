@@ -45,6 +45,9 @@ public class Event implements IEvent {
     }
     
     private boolean isValidTime(Calendar time) {
+        if (time == null) {
+            return false;
+        }
         return time.after(ICalendarApp.MINCAL) && time.before(ICalendarApp.MAXCAL);
     }
     
@@ -176,8 +179,33 @@ public class Event implements IEvent {
 
     @Override
     public boolean editEvent(String editField, Object editResult) {
-        // TODO Auto-generated method stub
-        return false;
+        
+        if (editField.equals("start")) {
+             if (!isValidTime((Calendar) editResult)) {
+                 return false;
+             }
+             this.startTime = (Calendar) editResult;
+            
+        } else if (editField.equals("end")) {
+            if (!isValidTime((Calendar) editResult)) {
+                return false;
+            }
+            
+            this.endTime = (Calendar) editResult;
+        } else if (editField.equals("name")) {
+            if ((String) editResult == null || ((String) editResult).length() < 1 ) {
+                return false;
+            }
+            this.eventName = (String) editResult;
+            
+        } else if (editField.equals("description")) {
+            if ((String) editResult == null || ((String) editResult).length() < 1 ) {
+                return false;
+            }
+            this.description = (String) editResult;
+        }
+        
+        return true;
     }
 
 
