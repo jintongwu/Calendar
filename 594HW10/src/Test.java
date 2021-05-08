@@ -103,6 +103,37 @@ public class Test {
         
 
         System.out.printf("%tR\n", cal3);
+        System.out.println();
+        
+        
+        
+        
+        
+        
+        String[][] view = ICalendarApp.WEEKVIEW.clone();
+        
+        String etc = "...";
+        view[1][1] = "Buy Carrots at Wholefoods";
+        view[5][5] = "594 HW due";
+        if (view[1][1].length() > 14) {
+            view[1][1] = view[1][1].substring(0, 14) + etc;
+        }
+        
+        
+        int days = cal3.get(Calendar.DAY_OF_MONTH);
+        
+        System.out.println(ICalendarApp.LINESEPARATE);
+        System.out.printf("%60sWeek of %tB %<te, %<tY \n", " ", cal3);
+        System.out.printf("%s\n%5s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
+                view[0][0], view[0][1], days, view[0][2], days+1, view[0][3], days+2, 
+                view[0][4], days+3, view[0][5], days+4, view[0][6], days+5, view[0][7], days+6);
+        for (int i = 1; i < 14; i ++) {
+            System.out.printf("%s\n%5s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+                    view[i][0], view[i][1], view[i][2], view[i][3],
+                    view[i][4], view[i][5], view[i][6], view[i][7]);
+        }
+        System.out.println(ICalendarApp.LINESEPARATE);
+        
     }
 
 }

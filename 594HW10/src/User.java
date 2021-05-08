@@ -176,8 +176,101 @@ public class User implements IUser {
     }
 
     @Override
-    public void viewCalendarByWeek(Calendar startOfWeekDate) {
-        // TODO Auto-generated method stub
+    public void viewCalendarByWeek(Calendar dayInTargetWeek) {
+        
+        // change target date to the Monday in that week
+        mondayFinder(dayInTargetWeek);
+        
+        // get templates
+        String[][] view = ICalendarApp.WEEKVIEW.clone();
+        
+        // read event string from calendar
+        // populate view with HARD-COPYs of event names
+        viewHelper(dayInTargetWeek, view);
+        
+        // trim Strings and add "..."
+        for (int i = 1; i < view.length; i ++) {
+            for (int j = 1; j < view[0].length; j ++) {
+                if (view[i][j].length() > 14) {
+                    view[i][j] = view[1][1].substring(0, 14) + ICalendarApp.etc;
+                }
+            }
+        }
+        
+        // get Monday date of the month
+        int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
+        
+        // print header
+        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", " ", ICalendarApp.LINESEPARATE, dayInTargetWeek);
+        System.out.printf("%s\n%5s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
+                view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
+                view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
+        
+        // print event by start time
+        for (int i = 1; i < 14; i ++) {
+            System.out.printf("%s\n%5s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+                    view[i][0], view[i][1], view[i][2], view[i][3],
+                    view[i][4], view[i][5], view[i][6], view[i][7]);
+        }
+        System.out.println(ICalendarApp.LINESEPARATE);
+        
+    }
+    
+    /**
+     * Helper function to add hard-copies of event name within the week calendar view to the view martix
+     * @param dayInTargetWeek
+     * @param view
+     */
+    private void viewHelper(Calendar dayInTargetWeek, String[][] view) {
+        
+        // create range of find
+        Calendar start = (Calendar) dayInTargetWeek.clone();
+        start.set(Calendar.HOUR_OF_DAY, 7);
+        start.set(Calendar.MINUTE, 59);
+        Calendar end = (Calendar) dayInTargetWeek.clone();
+        end.set(Calendar.HOUR_OF_DAY, 22);
+        end.set(Calendar.MINUTE, 00);
+        
+        // for each weekday
+        for (int i = 1; i < 8; i ++) {
+           for (IEvent e : this.events) {
+               int lastH = -1;
+               Calendar startTime = e.getStartTime();
+               if (startTime.after(start) && startTime.before(start)) {
+                   // TODO: edge case, has overlapping events
+                   // if the view does not have a value of that hour already
+                   // fill the view with the event name and update lastH
+                   if (lastH != startTime.get(Calendar.HOUR_OF_DAY)) {
+                       lastH = startTime.get(Calendar.HOUR_OF_DAY);
+                       view[lastH][i] = new String(e.getEventName());
+                   }
+               }
+           }
+        }
+        
+    }
+
+    /**
+     * Helper function to modify the input time of the viewCalendarByWeek() to the the Monday of that week
+     * @param dayInTargetWeek
+     */
+    private void mondayFinder(Calendar dayInTargetWeek) {
+        switch (dayInTargetWeek.get(Calendar.DAY_OF_WEEK)) {
+            case Calendar.MONDAY:
+            case Calendar.TUESDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -1);
+            case Calendar.WEDNESDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -2);
+            case Calendar.THURSDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -3);
+            case Calendar.FRIDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -4);
+            case Calendar.SATURDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -5);
+            case Calendar.SUNDAY:
+                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -6);
+            default:  
+        }
     }
 
     @Override

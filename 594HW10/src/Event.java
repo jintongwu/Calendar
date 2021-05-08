@@ -44,13 +44,23 @@ public class Event implements IEvent {
         
     }
     
-    private boolean isValidTime(Calendar time) {
+    /**
+     * helper function to determine if a time is within the valid range defined by this application
+     * @param time
+     * @return
+     */
+    private static boolean isValidTime(Calendar time) {
         if (time == null) {
             return false;
         }
         return time.after(ICalendarApp.MINCAL) && time.before(ICalendarApp.MAXCAL);
     }
     
+    /**
+     * Helper function to parse the input string date to Calendar object
+     * @param time
+     * @return
+     */
     private Calendar parseTime(String time) {
         String[] working = time.split("-");
         
