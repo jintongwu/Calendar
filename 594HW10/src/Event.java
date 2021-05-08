@@ -28,7 +28,7 @@ public class Event implements IEvent {
         }
         if (!isValidTime(this.startTime) || !isValidTime(this.endTime)) {
             throw new IllegalArgumentException("Invalid Arguemnt: Start Time or End Time must be after 2000-1-1-00-00"
-                    + "or before 2100-12-31-23-59");
+                    + "and before 2100-12-31-23-59");
         }
         if (this.startTime.after(this.endTime)) {
             throw new IllegalArgumentException("Invalid Arguemnt: Start Time is after End Time");
