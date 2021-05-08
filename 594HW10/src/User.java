@@ -46,11 +46,16 @@ public class User implements IUser {
             } else {
                 // insert at the first position we encounter a event starts
                 // later than the event we want to insert
+                
+                // edge case: 
+                // when the start time is the same
+                // put the one that ends first to the front
                 int i = 0;
                 IEvent tmp = null;
                 while(i < this.events.size()) {
                     tmp = this.events.get(i);
-                    if (tmp.getStartTime().after(event.getStartTime())) {
+                    if (tmp.getStartTime().after(event.getStartTime()) &&
+                            tmp.getEndTime().after(event.getEndTime())) {
                         break;
                     }
                     i ++;
@@ -95,25 +100,83 @@ public class User implements IUser {
     }
 
     @Override
-    public void printEvent(String eventName) {
-        // TODO Auto-generated method stub
-
+    public void printEvent(IEvent event) {   
+        System.out.printf("%tR - %tR %s\n", 
+                event.getStartTime(), event.getEndTime(), event.getEventName());
     }
 
     @Override
     public IEvent nextEvent() {
-        // TODO Auto-generated method stub
+        if (this.events == null || this.events.size() == 0) {
+            // no event
+            return null;
+        }
+        
+        Calendar now = Calendar.getInstance();
+        
+        // find the event and delete and return
+        int i = 0;
+        IEvent tmp = null;
+        while(i < this.events.size()) {
+            tmp = this.events.get(i);
+            if (tmp.getStartTime().after(now)) {
+                return tmp;
+            }
+            i ++;
+        }
+        
+        // no such event
         return null;
     }
-
-    @Override
-    public void viewCalendarByDay(Calendar startDate, int userID) {
-        // TODO Auto-generated method stub
-
+    
+    /**
+     * Check if two time are one the same day
+     * @param target
+     * @param curr
+     * @return
+     */
+    private boolean checkDay(Calendar target, Calendar curr) {
+        
+        boolean bYear = target.get(Calendar.YEAR) == curr.get(Calendar.YEAR);
+        boolean bMonth = target.get(Calendar.MONTH) == curr.get(Calendar.MONTH);
+        boolean bDay = target.get(Calendar.DAY_OF_MONTH) == curr.get(Calendar.DAY_OF_MONTH);
+        
+        return bYear && bMonth && bDay;
+        
     }
 
     @Override
-    public void viewCalendarByWeek(Calendar startDate, int userID) {
+    public void viewCalendarByDay(Calendar targetDate) {
+        
+        System.out.printf("Your Scedule for %tA %<tB  %<te,  %<tY is:\n");
+        // find all event on that day
+        List<IEvent> day = new LinkedList<>();;
+        
+        // get all even that starts on target day
+        int i = 0;
+        IEvent tmp = null;
+        while(i < this.events.size()) {
+            tmp = this.events.get(i);
+            if (checkDay(targetDate, tmp.getStartTime())) {
+                day.add(tmp);
+            }
+            i ++;
+        }
+        
+        if (day.size() == 0) {
+            System.out.println("You do not have any event on this day.");
+            return;
+        }
+        
+        // print each event
+        for (IEvent e : day) {
+            printEvent(e);
+        }
+        
+    }
+
+    @Override
+    public void viewCalendarByWeek(Calendar startOfWeekDate) {
         // TODO Auto-generated method stub
     }
 

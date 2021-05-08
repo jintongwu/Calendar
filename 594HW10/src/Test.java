@@ -100,6 +100,9 @@ public class Test {
         minute = cal3.get(Calendar.MINUTE);
         System.out.println(minute);
         
+        
+
+        System.out.printf("%tR\n", cal3);
     }
 
 }

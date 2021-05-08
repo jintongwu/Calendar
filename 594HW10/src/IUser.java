@@ -40,7 +40,7 @@ public interface IUser extends Comparable<IUser> {
      *
      * @param event
      */
-    public void printEvent(String eventName);
+    public void printEvent(IEvent event);
 
     /**
      *
@@ -55,7 +55,7 @@ public interface IUser extends Comparable<IUser> {
      * @param startDate
      * @param userID
      */
-    public void viewCalendarByDay(Calendar startDate, int userID);
+    public void viewCalendarByDay(Calendar targetDate);
 
     /**
      * Print a week frame view of a user calendar,
@@ -63,7 +63,7 @@ public interface IUser extends Comparable<IUser> {
      * @param startDate
      * @param userID
      */
-    public void viewCalendarByWeek(Calendar startDate, int userID);
+    public void viewCalendarByWeek(Calendar startOfWeekDate);
 
     /**
      * Return the UserId
