@@ -65,7 +65,7 @@ public class Event implements IEvent {
      * @param time
      * @return
      */
-    private Calendar parseTime(String time) {
+    protected static Calendar parseTime(String time) {
         String[] working = time.split("-");
         
         // check input length

@@ -7,6 +7,10 @@ public class CalendarApp implements ICalendarApp {
     private List<IUser> users;
     private int nextAvailID;
     
+    public CalendarApp() {
+        calendarInit();
+    }
+    
     @Override
     public void calendarInit() {
         this.users = new ArrayList<IUser>();

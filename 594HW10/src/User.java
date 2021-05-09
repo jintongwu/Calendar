@@ -288,7 +288,7 @@ public class User implements IUser {
     @Override
     public void viewCalendarByDay(Calendar targetDate) {
         
-        System.out.printf("Your Scedule for %tA %<tB  %<te,  %<tY is:\n");
+        System.out.printf("Your Schedule(s) for -- %tA %<tB %<te, %<tY -- are:\n", targetDate);
         // find all event on that day
         List<IEvent> day = new LinkedList<>();;
         
@@ -332,7 +332,7 @@ public class User implements IUser {
         int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
         
         // print header
-        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", " ", ICalendarApp.LINESEPARATE, dayInTargetWeek);
+        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", ICalendarApp.LINESEPARATE, " ", dayInTargetWeek);
         System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
                 view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
                 view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
@@ -363,28 +363,33 @@ public class User implements IUser {
         end.set(Calendar.MINUTE, 00);
         
         @SuppressWarnings("unchecked")
-        LinkedList<String>[][] viewEvents = new LinkedList[12][7];
+        LinkedList<String>[][] viewEvents = new LinkedList[14][8];
         
         
+        // for each day
         // get names of events for each hour
         // stored in list
         for (int i = 1; i < 8; i ++) {
            for (IEvent e : this.events) {  
                Calendar startTime = e.getStartTime();
                Calendar endTime = e.getEndTime();
+//               System.out.println(e.getEventName());
                // add curr events names to the string list of according hours
                // from start to end, both inclusive
-               if (startTime.after(start) && startTime.before(start)) {
+               if (startTime.after(start) && startTime.before(end)) {
                    int startH = startTime.get(Calendar.HOUR_OF_DAY);
                    int endH = endTime.get(Calendar.HOUR_OF_DAY);
-                   for (int j = startH; j <= endH; j ++) {
+                   for (int j = startH - 7; j < Math.min(endH - 71, 14); j ++) {
                        if (viewEvents[j][i] == null) {
                            viewEvents[j][i] = new LinkedList<String>();
                        }
                        viewEvents[j][i].add(e.getEventName());
+                       System.out.println("size " + viewEvents[j][i].size());
                    }          
                }
            }
+           start.add(Calendar.DAY_OF_MONTH, 1);
+           end.add(Calendar.DAY_OF_MONTH, 1);
         }
         
         

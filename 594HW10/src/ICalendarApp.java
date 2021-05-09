@@ -16,7 +16,7 @@ public interface ICalendarApp {
     final static String etc = "...";
     final static String LINESEPARATE = "-------------------------------------------------------------"
             + "--------------------------------------------------------------------------------------";
-    final static String[][] WEEKVIEW = new String[][] {{"", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"},
+    final static String[][] WEEKVIEW = new String[][] {{"", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"},
                                                         {"  8 AM", "", "", "", "", "", "", ""},
                                                         {"  9 AM", "", "", "", "", "", "", ""},
                                                         {" 10 AM", "", "", "", "", "", "", ""},
