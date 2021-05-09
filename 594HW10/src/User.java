@@ -14,13 +14,13 @@ public class User implements IUser {
     public User (String name, int id) {
         this.userName = name;
         this.userID = id;
-        userInit();
+        this.events = new LinkedList<IEvent>();
     }
     
     public User (String name, int id, int constraintStart, int constraintEnd) {
         this.userName = name;
         this.userID = id;
-        userInit();
+        this.events = new LinkedList<IEvent>();
         this.constraintStart = constraintStart;
         this.constraintEnd = constraintEnd;
     }
@@ -29,11 +29,6 @@ public class User implements IUser {
     public int compareTo(IUser o) {
         Integer thisId = this.userID;
         return thisId.compareTo(o.getUserID());
-    }
-
-    @Override
-    public void userInit() {
-        this.events = new LinkedList<IEvent>();
     }
 
     @Override

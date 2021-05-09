@@ -7,10 +7,6 @@ public interface IUser extends Comparable<IUser> {
     // Integer userID
     // String userName
 
-    /**
-     * initialize a calendar for this user
-     */
-    public void userInit();
 
     /**
      * Enable user to add an event, return true if the event is successfully added,

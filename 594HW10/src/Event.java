@@ -87,7 +87,7 @@ public class Event implements IEvent {
         }
         
         // check input range
-        if (2000 < year || year > 2100) {
+        if (year < 2000 || year > 2100) {
             return null;
         } else if (month < 1 || month > 12) {
             return null;
@@ -129,7 +129,13 @@ public class Event implements IEvent {
     }
 
     @Override
-    public boolean changeStartTime(Calendar time) {
+    public boolean changeStartTime(String Stime) {
+        Calendar time = parseTime(Stime);
+        
+        if (time == null) {
+            return false;
+        }
+        
         // validate time
         if (time.after(this.endTime) || !isValidTime(time)) {
             return false;
@@ -140,7 +146,14 @@ public class Event implements IEvent {
 
 
     @Override
-    public boolean changeEndTime(Calendar time) {
+    public boolean changeEndTime(String Etime) {
+        
+        Calendar time = parseTime(Etime);
+        
+        if (time == null) {
+            return false;
+        }
+        
         // validate time
         if (time.before(this.startTime) || !isValidTime(time)) {
             return false;
@@ -160,13 +173,19 @@ public class Event implements IEvent {
         Calendar newEnd = (Calendar) this.startTime.clone();
         newEnd.add(Calendar.HOUR_OF_DAY, hours);
         newEnd.add(Calendar.MINUTE, mins);
-        return false;
+        this.endTime = newEnd;
+        return true;
     }
 
     @Override
     public int compareTo(IEvent o) {
         // compare by start time
         Calendar other = o.getStartTime();
+        // compare end time if start times are the same
+        if (this.startTime.compareTo(other) == 0) {
+            Calendar otherE = o.getEndTime();
+            return this.endTime.compareTo(otherE);
+        }
         return this.startTime.compareTo(other);
     }
 
@@ -186,37 +205,5 @@ public class Event implements IEvent {
     public String getEventName() {
         return this.eventName;
     }
-
-    @Override
-    public boolean editEvent(String editField, Object editResult) {
-        
-        if (editField.equals("start")) {
-             if (!isValidTime((Calendar) editResult)) {
-                 return false;
-             }
-             this.startTime = (Calendar) editResult;
-            
-        } else if (editField.equals("end")) {
-            if (!isValidTime((Calendar) editResult)) {
-                return false;
-            }
-            
-            this.endTime = (Calendar) editResult;
-        } else if (editField.equals("name")) {
-            if ((String) editResult == null || ((String) editResult).length() < 1 ) {
-                return false;
-            }
-            this.eventName = (String) editResult;
-            
-        } else if (editField.equals("description")) {
-            if ((String) editResult == null || ((String) editResult).length() < 1 ) {
-                return false;
-            }
-            this.description = (String) editResult;
-        }
-        
-        return true;
-    }
-
 
 }

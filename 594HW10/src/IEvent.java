@@ -38,7 +38,7 @@ public interface IEvent extends Comparable<IEvent> {
      * @return true if the edit is successful false if error has occurred (e.g.
      *         startTime is later than endTime)
      */
-    public boolean changeStartTime(Calendar time);
+    public boolean changeStartTime(String time);
 
     /**
      * change the end time of the the event
@@ -46,7 +46,7 @@ public interface IEvent extends Comparable<IEvent> {
      * @param time
      * @return true if the edit is successful, false if error
      */
-    public boolean changeEndTime(Calendar time);
+    public boolean changeEndTime(String time);
 
     /**
      * change the duration of the event by modifying the end time of the event
@@ -64,7 +64,5 @@ public interface IEvent extends Comparable<IEvent> {
     public Calendar getEndTime();
 
     public String getEventName();
-
-    public boolean editEvent(String editField, Object editResult);
 
 }
