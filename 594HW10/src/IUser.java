@@ -95,4 +95,6 @@ public interface IUser extends Comparable<IUser> {
      */
     
     public List<Calendar[]> getAvailableTime(List<Calendar[]> l);
+
+    IEvent searchEvent(String name);
 }

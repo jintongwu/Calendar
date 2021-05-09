@@ -45,12 +45,13 @@ public class User implements IUser {
                 // edge case: 
                 // when the start time is the same
                 // put the one that ends first to the front
+                    // when start and end are both the same
+                    // new one is added to the second
                 int i = 0;
                 IEvent tmp = null;
                 while(i < this.events.size()) {
                     tmp = this.events.get(i);
-                    if (tmp.getStartTime().after(event.getStartTime()) &&
-                            tmp.getEndTime().after(event.getEndTime())) {
+                    if (tmp.getStartTime().after(event.getStartTime())) {
                         break;
                     }
                     i ++;
@@ -83,7 +84,7 @@ public class User implements IUser {
         IEvent tmp = null;
         while(i < this.events.size()) {
             tmp = this.events.get(i);
-            if (tmp.getEventName().equals(tmp.getEventName())) {
+            if (tmp.getEventName().equals(eventName)) {
                 this.events.remove(i);
                 return true;
             }
@@ -92,12 +93,6 @@ public class User implements IUser {
 
         return false;
 
-    }
-
-    @Override
-    public void printEvent(IEvent event) {   
-        System.out.printf("%tR - %tR %s\n", 
-                event.getStartTime(), event.getEndTime(), event.getEventName());
     }
 
     @Override
@@ -124,204 +119,67 @@ public class User implements IUser {
         return null;
     }
     
+    @Override
+    public IEvent searchEvent(String name) {
+        if (this.events == null || this.events.size() == 0) {
+            // no event
+            return null;
+        }
+        
+        // find the event and delete and return
+        int i = 0;
+        IEvent tmp = null;
+        while(i < this.events.size()) {
+            tmp = this.events.get(i);
+            if (tmp.getEventName().equals(name)) {
+                return tmp;
+            }
+            i ++;
+        }
+        
+        // no such event
+        return null;
+    }
+    
     /**
      * Check if two time are one the same day
      * @param target
      * @param curr
      * @return
      */
-    private boolean checkDay(Calendar target, Calendar curr) {
+    protected static boolean checkDay(Calendar target, Calendar curr) {
         
-        boolean bYear = target.get(Calendar.YEAR) == curr.get(Calendar.YEAR);
-        boolean bMonth = target.get(Calendar.MONTH) == curr.get(Calendar.MONTH);
+        boolean bYear = (target.get(Calendar.YEAR) == curr.get(Calendar.YEAR));
+        boolean bMonth = (target.get(Calendar.MONTH) == curr.get(Calendar.MONTH));
         boolean bDay = target.get(Calendar.DAY_OF_MONTH) == curr.get(Calendar.DAY_OF_MONTH);
         
         return bYear && bMonth && bDay;
         
     }
-
-    @Override
-    public void viewCalendarByDay(Calendar targetDate) {
-        
-        System.out.printf("Your Scedule for %tA %<tB  %<te,  %<tY is:\n");
-        // find all event on that day
-        List<IEvent> day = new LinkedList<>();;
-        
-        // get all even that starts on target day
-        int i = 0;
-        IEvent tmp = null;
-        while(i < this.events.size()) {
-            tmp = this.events.get(i);
-            if (checkDay(targetDate, tmp.getStartTime())) {
-                day.add(tmp);
-            }
-            i ++;
-        }
-        
-        if (day.size() == 0) {
-            System.out.println("You do not have any event on this day.");
-            return;
-        }
-        
-        // print each event
-        for (IEvent e : day) {
-            printEvent(e);
-        }
-        
-    }
-
-    @Override
-    public void viewCalendarByWeek(Calendar dayInTargetWeek) {
-        
-        // change target date to the Monday in that week
-        mondayFinder(dayInTargetWeek);
-        
-        // get templates
-        String[][] view = ICalendarApp.WEEKVIEW.clone();
-        
-        // read event string from calendar
-        // populate view with HARD-COPYs of event names
-        viewHelper(dayInTargetWeek, view);
-        
-        // get Monday date of the month
-        int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
-        
-        // print header
-        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", " ", ICalendarApp.LINESEPARATE, dayInTargetWeek);
-        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
-                view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
-                view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
-        
-        // print event by start time
-        for (int i = 1; i < 14; i ++) {
-            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
-                    view[i][0], view[i][1], view[i][2], view[i][3],
-                    view[i][4], view[i][5], view[i][6], view[i][7]);
-        }
-        System.out.println(ICalendarApp.LINESEPARATE);
-        
-    }
     
-    /**
-     * Helper function to add hard-copies of event name within the week calendar view to the view martix
-     * @param dayInTargetWeek
-     * @param view
-     */
-    private void viewHelper(Calendar dayInTargetWeek, String[][] view) {
-        
-        // create range of find
-        Calendar start = (Calendar) dayInTargetWeek.clone();
-        start.set(Calendar.HOUR_OF_DAY, 7);
-        start.set(Calendar.MINUTE, 59);
-        Calendar end = (Calendar) dayInTargetWeek.clone();
-        end.set(Calendar.HOUR_OF_DAY, 22);
-        end.set(Calendar.MINUTE, 00);
-        
-        @SuppressWarnings("unchecked")
-        LinkedList<String>[][] viewEvents = new LinkedList[12][7];
-        
-        
-        // get names of events for each hour
-        // stored in list
-        for (int i = 1; i < 8; i ++) {
-           for (IEvent e : this.events) {  
-               Calendar startTime = e.getStartTime();
-               Calendar endTime = e.getEndTime();
-               // add curr events names to the string list of according hours
-               // from start to end, both inclusive
-               if (startTime.after(start) && startTime.before(start)) {
-                   int startH = startTime.get(Calendar.HOUR_OF_DAY);
-                   int endH = endTime.get(Calendar.HOUR_OF_DAY);
-                   for (int j = startH; j <= endH; j ++) {
-                       if (viewEvents[j][i] == null) {
-                           viewEvents[j][i] = new LinkedList<String>();
-                       }
-                       viewEvents[j][i].add(e.getEventName());
-                   }          
-               }
-           }
-        }
-        
-        
-        // modify view matrix
-        for (int i = 1; i < 8; i ++) {
-            for (int j = 1; j < 14; j ++) {
-                // if there are events at this hour
-                if (viewEvents[j][i] != null) {
-                    // if only one event
-                    if (viewEvents[j][i].size() == 1) {
-                        // add "..." if the string to too long to display
-                        if (viewEvents[j][i].get(0).length() > 14) {
-                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14) + ICalendarApp.etc;
-                        } else {
-                            view[j][i] = new String(viewEvents[j][i].get(0));
-                        }
-                    } else {
-                        view[j][i] = "" + viewEvents[j][i].size() + " events";
-                    }
-                }
-            }          
-         }
-        
-//        // for each weekday
-//        for (int i = 1; i < 8; i ++) {
-//           int lastH = -1;
-//           int count = 0;
-//           for (IEvent e : this.events) {
-//               Calendar startTime = e.getStartTime();
-//               if (startTime.after(start) && startTime.before(start)) {
-//                   
-//                   // if the view does not have a value of that hour already
-//                   // fill the view with the event name and update lastH
-//                   if (lastH != startTime.get(Calendar.HOUR_OF_DAY)) {
-//                       lastH = startTime.get(Calendar.HOUR_OF_DAY);
-//                       
-//                       // add "..." if the string to too long to display
-//                       if (e.getEventName().length() > 14) {
-//                           view[lastH][i] = e.getEventName().substring(0, 14) + ICalendarApp.etc;
-//                       } else {
-//                           view[lastH][i] = new String(e.getEventName());
-//                       }
-//                       // reset count
-//                       count = 0;
-//                   } else {
-//                       // edge case, has overlapping events on the same hour
-//                       count ++;
-//                       view[lastH][i] = "" + count + " events";
-//                   }
-//               }
-//           }
-//        }
-        
-    }
-
     /**
      * Helper function to modify the input time of the viewCalendarByWeek() to the the Monday of that week
      * @param dayInTargetWeek
      */
-    private void mondayFinder(Calendar dayInTargetWeek) {
-        switch (dayInTargetWeek.get(Calendar.DAY_OF_WEEK)) {
-            case Calendar.MONDAY:
-            case Calendar.TUESDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -1);
-            case Calendar.WEDNESDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -2);
-            case Calendar.THURSDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -3);
-            case Calendar.FRIDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -4);
-            case Calendar.SATURDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -5);
-            case Calendar.SUNDAY:
-                dayInTargetWeek.add(Calendar.DAY_OF_MONTH, -6);
-            default:  
-        }
+    protected static void mondayFinder(Calendar dayInTargetWeek) {
+
+        // d = Calendar.get(Calendar.DAY_OF_WEEK)
+        // (d + numberOfDaysInAWeek - firstDayOfWeek) % numberOfDaysInAWeek
+        int currentDayOfWeek = 
+                (dayInTargetWeek.get(Calendar.DAY_OF_WEEK) + 7 
+                        - dayInTargetWeek.getFirstDayOfWeek()) % 7;
+        dayInTargetWeek.add(Calendar.DAY_OF_YEAR, -currentDayOfWeek);
     }
 
     @Override
     public int getUserID() {
         int ret = this.userID;
         return ret;
+    }
+
+    @Override
+    public String getUserName() {
+        return this.userName;
     }
 
     @Override
@@ -415,10 +273,141 @@ public class User implements IUser {
         return l;
         
     }
+    
+    
+    /*****************************************************************************/
+    
+    /**** SYSTEM.OUT method START *****/
 
     @Override
-    public String getUserName() {
-        return this.userName;
+    public void printEvent(IEvent event) {   
+        System.out.printf("%tR - %tR %s\n", 
+                event.getStartTime(), event.getEndTime(), event.getEventName());
     }
 
+    @Override
+    public void viewCalendarByDay(Calendar targetDate) {
+        
+        System.out.printf("Your Scedule for %tA %<tB  %<te,  %<tY is:\n");
+        // find all event on that day
+        List<IEvent> day = new LinkedList<>();;
+        
+        // get all even that starts on target day
+        int i = 0;
+        IEvent tmp = null;
+        while(i < this.events.size()) {
+            tmp = this.events.get(i);
+            if (checkDay(targetDate, tmp.getStartTime())) {
+                day.add(tmp);
+            }
+            i ++;
+        }
+        
+        if (day.size() == 0) {
+            System.out.println("You do not have any event on this day.");
+            return;
+        }
+        
+        // print each event
+        for (IEvent e : day) {
+            printEvent(e);
+        }
+        
+    }
+
+    @Override
+    public void viewCalendarByWeek(Calendar dayInTargetWeek) {
+        
+        // change target date to the Monday in that week
+        mondayFinder(dayInTargetWeek);
+        
+        // get templates
+        String[][] view = ICalendarApp.WEEKVIEW.clone();
+        
+        // read event string from calendar
+        // populate view with HARD-COPYs of event names
+        viewHelper(dayInTargetWeek, view);
+        
+        // get Monday date of the month
+        int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
+        
+        // print header
+        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", " ", ICalendarApp.LINESEPARATE, dayInTargetWeek);
+        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
+                view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
+                view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
+        
+        // print event by start time
+        for (int i = 1; i < 14; i ++) {
+            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+                    view[i][0], view[i][1], view[i][2], view[i][3],
+                    view[i][4], view[i][5], view[i][6], view[i][7]);
+        }
+        System.out.println(ICalendarApp.LINESEPARATE);
+        
+    }
+    
+    /**
+     * Helper function to add hard-copies of event name within the week calendar view to the view martix
+     * @param dayInTargetWeek
+     * @param view
+     */
+    protected void viewHelper(Calendar dayInTargetWeek, String[][] view) {
+        
+        // create range of find
+        Calendar start = (Calendar) dayInTargetWeek.clone();
+        start.set(Calendar.HOUR_OF_DAY, 7);
+        start.set(Calendar.MINUTE, 59);
+        Calendar end = (Calendar) dayInTargetWeek.clone();
+        end.set(Calendar.HOUR_OF_DAY, 22);
+        end.set(Calendar.MINUTE, 00);
+        
+        @SuppressWarnings("unchecked")
+        LinkedList<String>[][] viewEvents = new LinkedList[12][7];
+        
+        
+        // get names of events for each hour
+        // stored in list
+        for (int i = 1; i < 8; i ++) {
+           for (IEvent e : this.events) {  
+               Calendar startTime = e.getStartTime();
+               Calendar endTime = e.getEndTime();
+               // add curr events names to the string list of according hours
+               // from start to end, both inclusive
+               if (startTime.after(start) && startTime.before(start)) {
+                   int startH = startTime.get(Calendar.HOUR_OF_DAY);
+                   int endH = endTime.get(Calendar.HOUR_OF_DAY);
+                   for (int j = startH; j <= endH; j ++) {
+                       if (viewEvents[j][i] == null) {
+                           viewEvents[j][i] = new LinkedList<String>();
+                       }
+                       viewEvents[j][i].add(e.getEventName());
+                   }          
+               }
+           }
+        }
+        
+        
+        // modify view matrix
+        for (int i = 1; i < 8; i ++) {
+            for (int j = 1; j < 14; j ++) {
+                // if there are events at this hour
+                if (viewEvents[j][i] != null) {
+                    // if only one event
+                    if (viewEvents[j][i].size() == 1) {
+                        // add "..." if the string to too long to display
+                        if (viewEvents[j][i].get(0).length() > 14) {
+                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14) + ICalendarApp.etc;
+                        } else {
+                            view[j][i] = new String(viewEvents[j][i].get(0));
+                        }
+                    } else {
+                        view[j][i] = "" + viewEvents[j][i].size() + " events";
+                    }
+                }
+            }          
+         }
+    }
+    
+    /**** SYSTEM.OUT method END *****/
 }

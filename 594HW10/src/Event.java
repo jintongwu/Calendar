@@ -37,6 +37,10 @@ public class Event implements IEvent {
             throw new IllegalArgumentException("Invalid Arguemnt: Must give event a valid short name");
         }
         
+        // set first day of the week
+        this.startTime.setFirstDayOfWeek(Calendar.MONDAY);
+        this.endTime.setFirstDayOfWeek(Calendar.MONDAY);
+        
         // assign variable
         this.eventName = eventName;
         this.description = "";
