@@ -109,14 +109,23 @@ public class Test {
         
         
         
-        
+        cal3 = new GregorianCalendar(2021, 4, 3, 8, 0);
         String[][] view = ICalendarApp.WEEKVIEW.clone();
         
-        String etc = "...";
         view[1][1] = "Buy Carrots at Wholefoods";
         view[5][5] = "594 HW due";
-        if (view[1][1].length() > 14) {
-            view[1][1] = view[1][1].substring(0, 14) + etc;
+        view[1][5] = "548 Final Exam";
+        view[10][1] = "596 Review Session";
+        view[7][7] = "Korean BBQ with Arvind";
+        view[10][7] = "3 events";
+        
+        // trim Strings and add "..."
+        for (int i = 1; i < view.length; i ++) {
+            for (int j = 1; j < view[0].length; j ++) {
+                if (view[i][j].length() > 14) {
+                    view[i][j] = view[i][j].substring(0, 14) + ICalendarApp.etc;
+                }
+            }
         }
         
         
@@ -124,11 +133,11 @@ public class Test {
         
         System.out.println(ICalendarApp.LINESEPARATE);
         System.out.printf("%60sWeek of %tB %<te, %<tY \n", " ", cal3);
-        System.out.printf("%s\n%5s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
+        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
                 view[0][0], view[0][1], days, view[0][2], days+1, view[0][3], days+2, 
                 view[0][4], days+3, view[0][5], days+4, view[0][6], days+5, view[0][7], days+6);
         for (int i = 1; i < 14; i ++) {
-            System.out.printf("%s\n%5s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
                     view[i][0], view[i][1], view[i][2], view[i][3],
                     view[i][4], view[i][5], view[i][6], view[i][7]);
         }

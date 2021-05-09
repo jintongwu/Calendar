@@ -188,27 +188,18 @@ public class User implements IUser {
         // populate view with HARD-COPYs of event names
         viewHelper(dayInTargetWeek, view);
         
-        // trim Strings and add "..."
-        for (int i = 1; i < view.length; i ++) {
-            for (int j = 1; j < view[0].length; j ++) {
-                if (view[i][j].length() > 14) {
-                    view[i][j] = view[1][1].substring(0, 14) + ICalendarApp.etc;
-                }
-            }
-        }
-        
         // get Monday date of the month
         int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
         
         // print header
         System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", " ", ICalendarApp.LINESEPARATE, dayInTargetWeek);
-        System.out.printf("%s\n%5s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
+        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
                 view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
                 view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
         
         // print event by start time
         for (int i = 1; i < 14; i ++) {
-            System.out.printf("%s\n%5s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
                     view[i][0], view[i][1], view[i][2], view[i][3],
                     view[i][4], view[i][5], view[i][6], view[i][7]);
         }
@@ -231,22 +222,81 @@ public class User implements IUser {
         end.set(Calendar.HOUR_OF_DAY, 22);
         end.set(Calendar.MINUTE, 00);
         
-        // for each weekday
+        @SuppressWarnings("unchecked")
+        LinkedList<String>[][] viewEvents = new LinkedList[12][7];
+        
+        
+        // get names of events for each hour
+        // stored in list
         for (int i = 1; i < 8; i ++) {
-           for (IEvent e : this.events) {
-               int lastH = -1;
+           for (IEvent e : this.events) {  
                Calendar startTime = e.getStartTime();
+               Calendar endTime = e.getEndTime();
+               // add curr events names to the string list of according hours
+               // from start to end, both inclusive
                if (startTime.after(start) && startTime.before(start)) {
-                   // TODO: edge case, has overlapping events
-                   // if the view does not have a value of that hour already
-                   // fill the view with the event name and update lastH
-                   if (lastH != startTime.get(Calendar.HOUR_OF_DAY)) {
-                       lastH = startTime.get(Calendar.HOUR_OF_DAY);
-                       view[lastH][i] = new String(e.getEventName());
-                   }
+                   int startH = startTime.get(Calendar.HOUR_OF_DAY);
+                   int endH = endTime.get(Calendar.HOUR_OF_DAY);
+                   for (int j = startH; j <= endH; j ++) {
+                       if (viewEvents[j][i] == null) {
+                           viewEvents[j][i] = new LinkedList<String>();
+                       }
+                       viewEvents[j][i].add(e.getEventName());
+                   }          
                }
            }
         }
+        
+        
+        // modify view matrix
+        for (int i = 1; i < 8; i ++) {
+            for (int j = 1; j < 14; j ++) {
+                // if there are events at this hour
+                if (viewEvents[j][i] != null) {
+                    // if only one event
+                    if (viewEvents[j][i].size() == 1) {
+                        // add "..." if the string to too long to display
+                        if (viewEvents[j][i].get(0).length() > 14) {
+                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14) + ICalendarApp.etc;
+                        } else {
+                            view[j][i] = new String(viewEvents[j][i].get(0));
+                        }
+                    } else {
+                        view[j][i] = "" + viewEvents[j][i].size() + " events";
+                    }
+                }
+            }          
+         }
+        
+//        // for each weekday
+//        for (int i = 1; i < 8; i ++) {
+//           int lastH = -1;
+//           int count = 0;
+//           for (IEvent e : this.events) {
+//               Calendar startTime = e.getStartTime();
+//               if (startTime.after(start) && startTime.before(start)) {
+//                   
+//                   // if the view does not have a value of that hour already
+//                   // fill the view with the event name and update lastH
+//                   if (lastH != startTime.get(Calendar.HOUR_OF_DAY)) {
+//                       lastH = startTime.get(Calendar.HOUR_OF_DAY);
+//                       
+//                       // add "..." if the string to too long to display
+//                       if (e.getEventName().length() > 14) {
+//                           view[lastH][i] = e.getEventName().substring(0, 14) + ICalendarApp.etc;
+//                       } else {
+//                           view[lastH][i] = new String(e.getEventName());
+//                       }
+//                       // reset count
+//                       count = 0;
+//                   } else {
+//                       // edge case, has overlapping events on the same hour
+//                       count ++;
+//                       view[lastH][i] = "" + count + " events";
+//                   }
+//               }
+//           }
+//        }
         
     }
 
