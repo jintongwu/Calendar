@@ -71,6 +71,8 @@ public interface IUser extends Comparable<IUser> {
      * @return
      */
     public int getUserID();
+    
+    public String getUserName();
 
 
     public void editStartConstraint(int startConstraint);
