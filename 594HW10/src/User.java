@@ -416,4 +416,9 @@ public class User implements IUser {
         
     }
 
+    @Override
+    public String getUserName() {
+        return this.userName;
+    }
+
 }

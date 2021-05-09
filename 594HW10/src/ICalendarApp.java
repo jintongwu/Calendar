@@ -54,7 +54,7 @@ public interface ICalendarApp {
      * @param the user that is to be added to the calendar app
      * @return whether this user is added successfully
      */
-    public IUser addUser(String name, int id);
+    public IUser addUser(String name);
 
     /**
      * Delete an user calendar from this application
@@ -76,5 +76,9 @@ public interface ICalendarApp {
      * @return a list of calendar array, each array contains start time and end time
      */
     public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime, List<IUser> users);
-
+    
+    public int getNextAvailID();
+    
+    public List<IUser> getUsers();
+    
 }

@@ -14,8 +14,10 @@ public class CalendarApp implements ICalendarApp {
     }
 
     @Override
-    public IUser addUser(String name, int id) {
-        IUser user = new User(name, id);
+    public IUser addUser(String name) {
+        IUser user = new User(name, this.nextAvailID);
+        users.add(user);
+        this.nextAvailID++;
         return user;
     }
 
@@ -35,29 +37,44 @@ public class CalendarApp implements ICalendarApp {
     @Override
     public List<Calendar[]> findOverlap(List<Calendar[]> c1, List<Calendar[]> c2) {
         List<Calendar[]> list = new ArrayList<>();
-        
+        if (c1.isEmpty() || c2.isEmpty()) {
+            return list;
+        }
+        int size2 = c2.size();
         // loop through calendar 1 slots
         for (int i = 0; i < c1.size(); i++) {
-            
             // get start and end time for index i slot in calendar 1
             Calendar start = c1.get(i)[0];
             Calendar end = c1.get(i)[1];
             
             // find calendar 2 slot with end time after slot i
             int index = 0;
-            while(c2.get(index)[1].before(start)) {
+            while(index < size2 && c2.get(index)[1].before(start)) {
                 index++;
             }
             
-            // if c2 event starts earlier, add slot starting the start time of slot i
-            if (c2.get(index)[0].before(start)) {
-                Calendar[] tuple = {start, c2.get(index)[1]};
-                list.add(tuple);
+            // if index reaches end of calendar 2, skip the loop
+            if (index >= size2) {
+                continue;
             }
             
-            index++;
+            // if c2 event starts earlier, add slot starting the start time of slot i
+            if (c2.get(index)[0].before(start) && c2.get(index)[1].before(end)) {
+                Calendar[] tuple = {start, c2.get(index)[1]};
+                list.add(tuple);
+                index++;
+            } else if (c2.get(index)[0].before(start) && c2.get(index)[1].after(end)) {
+                Calendar[] tuple = {start, end};
+                list.add(tuple);
+                continue;
+            }
             
-            while (c2.get(index)[0].before(end)) {
+         // if index reaches end of calendar 2, skip the loop
+            if (index >= size2) {
+                continue;
+                
+            }
+            while (index < size2 && c2.get(index)[0].before(end)) {
                 if (c2.get(index)[1].after(end)) {
                     Calendar[] tuple = {c2.get(index)[0], end};
                     list.add(tuple);
@@ -66,6 +83,7 @@ public class CalendarApp implements ICalendarApp {
                 }
                 index++;
             }
+            
         }
         
         
@@ -90,6 +108,16 @@ public class CalendarApp implements ICalendarApp {
         }
         
         return list;
+    }
+
+    @Override
+    public int getNextAvailID() {
+        return this.nextAvailID;
+    }
+
+    @Override
+    public List<IUser> getUsers() {
+        return this.users;
     }
 
     
