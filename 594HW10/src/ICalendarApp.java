@@ -80,5 +80,6 @@ public interface ICalendarApp {
     public int getNextAvailID();
     
     public List<IUser> getUsers();
-    
+
+    public List<Integer> parseAttendee(String input);
 }

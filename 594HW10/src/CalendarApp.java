@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CalendarApp implements ICalendarApp {
@@ -122,6 +123,24 @@ public class CalendarApp implements ICalendarApp {
     @Override
     public List<IUser> getUsers() {
         return this.users;
+    }
+
+    @Override
+    public List<Integer> parseAttendee(String input) {
+        List<Integer> res = new LinkedList<>();
+        
+        String[] split = input.split("-");
+        
+        if (split.length > 0) {
+            for (String name : split) {
+                for (IUser u : this.users) {
+                    if (u.getUserName().equals(name)) {
+                        res.add(u.getUserID());
+                    }
+                }
+            }
+        }
+        return res;
     }
 
     

@@ -187,5 +187,18 @@ public class CalendarAppTest {
         assertEquals(18, overlap.get(2)[1].get(Calendar.HOUR_OF_DAY));
     }
     
+    @Test
+    public void testParseAttendee() {
+        ICalendarApp app = new CalendarApp();
+        app.calendarInit();
+        app.addUser("Jintong");
+        app.addUser("Shuke");
+        
+        List<Integer> attendee = app.parseAttendee("Jintong-Shuke-RANDOM");
+        assertEquals(2, attendee.size());
+        assertEquals(1, (int) attendee.get(0));
+        assertEquals(2, (int) attendee.get(1));
+    }
+    
     
 }

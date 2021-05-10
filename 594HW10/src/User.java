@@ -287,8 +287,10 @@ public class User implements IUser {
 
     @Override
     public void viewCalendarByDay(Calendar targetDate) {
-        
+        System.out.println("------------------------------------------------------");
         System.out.printf("Your Schedule(s) for -- %tA %<tB %<te, %<tY -- are:\n", targetDate);
+        System.out.println("------------------------------------------------------");
+        
         // find all event on that day
         List<IEvent> day = new LinkedList<>();;
         
@@ -313,6 +315,7 @@ public class User implements IUser {
             printEvent(e);
         }
         
+        System.out.println("------------------------------------------------------");
     }
 
     @Override
@@ -379,12 +382,11 @@ public class User implements IUser {
                if (startTime.after(start) && startTime.before(end)) {
                    int startH = startTime.get(Calendar.HOUR_OF_DAY);
                    int endH = endTime.get(Calendar.HOUR_OF_DAY);
-                   for (int j = startH - 7; j < Math.min(endH - 71, 14); j ++) {
+                   for (int j = startH - 7; j < Math.min(endH - 7, 14); j ++) {
                        if (viewEvents[j][i] == null) {
                            viewEvents[j][i] = new LinkedList<String>();
                        }
                        viewEvents[j][i].add(e.getEventName());
-                       System.out.println("size " + viewEvents[j][i].size());
                    }          
                }
            }

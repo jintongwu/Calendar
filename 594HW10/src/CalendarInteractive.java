@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -16,8 +17,40 @@ public class CalendarInteractive {
     public void prompt() {
         while (true) {
             System.out.println("Welcome to Calendar!");
-            System.out.println("Please Enter your name:");
-            user(s.next());
+            
+            System.out.printf(
+                    "ID of the operation:\n" + "1 - User log-in\n" + "2 - find common time\n" + "3 - show all users\n");
+            try {
+                int id = s.nextInt();
+                s.nextLine();
+                switch (id) {
+                case 1:
+                    System.out.println("Please Enter your name:");
+                    user(s.nextLine());
+                    break;
+                    
+                case 2:
+                    // TODO: implement this
+                    break;
+                    
+                case 3:
+                    if (app.getUsers().size()==0) {
+                        System.out.println("Zero User!!");
+                    } else {
+                        System.out.println("Available User:");
+                        for (IUser u : app.getUsers()) {
+                            System.out.println(u.getUserName());
+                        }
+                    }
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.printf("Invalid input, try again.\n\n");
+                s.nextLine();
+                continue;
+            }
+
+            System.out.println();
         }
     }
 
@@ -41,31 +74,38 @@ public class CalendarInteractive {
                             + "4 - search event\n" + "5 - day view\n" + "6 - weekly view\n" + "7 - switch user\n");
 
             int id = s.nextInt();
-            System.out.printf("\n");
+            s.nextLine();
             switch (id) {
             case 1:
-                // TODO: input with spaces
-
-                System.out.println("Enter event name:");
-                String eventName = s.next();
-                System.out.println("Enter start time (format YYYY-MM-DD-HH-MM):");
-                String startTime = s.next();
-                System.out.println("Enter end time (format YYYY-MM-DD-HH-MM):");
-                String endTime = s.next();
-                System.out.println("Enter attendee names (format name-name...):");
-                String attendee = s.next();
-
-                // TODO: attendee
-                while (!currUser.addEvent(startTime, endTime, eventName, new LinkedList<Integer>())) {
-                    System.out.printf(
-                            "Invalid input. Please enter a correctly formated time period between year 2000 and 2100\n",
-                            eventName);
+           
+                String eventName;
+                String startTime;
+                String endTime;
+                String attendee;
+                while (true) {
+                    System.out.println("Enter event name:");
+                    eventName = s.nextLine();
+                    System.out.println("Enter start time (format YYYY-MM-DD-HH-MM):");
+                    startTime = s.nextLine();
+                    System.out.println("Enter end time (format YYYY-MM-DD-HH-MM):");
+                    endTime = s.nextLine();
+                    System.out.println("Enter attendee names (format name-name...):");
+                    attendee = s.nextLine();
+                    // TODO: attendee
+                    if (!currUser.addEvent(startTime, endTime, eventName, app.parseAttendee(attendee))) {
+                        System.out.printf(
+                                "Invalid input. Please enter a correctly formated time period between year 2000 and 2100\n\n",
+                                eventName);
+                        continue;
+                    } else {
+                        break;
+                    } 
                 }
                 System.out.printf("Event \"%s\" added!\n", eventName);
                 break;
             case 2:
                 System.out.println("Enter event name:");
-                String target = s.next();
+                String target = s.nextLine();
 
                 boolean ret = currUser.deleteEvent(target);
                 if (ret) {
@@ -87,7 +127,7 @@ public class CalendarInteractive {
                 break;
             case 4:
                 System.out.println("Enter event name:");
-                String search = s.next();
+                String search = s.nextLine();
                 IEvent result = currUser.searchEvent(search);
                 if (result != null) {
                     System.out.printf("Event found:\n");
@@ -99,25 +139,26 @@ public class CalendarInteractive {
                 break;
             case 5:
                 System.out.println("Enter date: (format: YYYY-MM-DD)");
-                String date = s.next() + "-1-0";
+                String date = s.nextLine() + "-1-0";
                 Calendar day = Event.parseTime(date);
-                if (day == null) {
-                    System.out.printf("Please enter a valid day between year 2000 and 2100\n");
-                } else {
-                    currUser.viewCalendarByDay(day);
+                while (day == null) {
+                    System.out.printf("Please enter a valid day between year 2000 and 2100, in YYYY-MM-DD format\n");
+                    date = s.nextLine() + "-1-0";
+                    day = Event.parseTime(date);
                 }
+                currUser.viewCalendarByDay(day);
                 break;
             case 6:
                 System.out.println("Enter a date of the week you want to view: (format: YYYY-MM-DD)");
-                String dayOfWeek = s.next() + "-1-0";
+                String dayOfWeek = s.nextLine() + "-1-0";
                 Calendar cal = Event.parseTime(dayOfWeek);
-                if (cal == null) {
-                    System.out.printf("Please enter a valid day between year 2000 and 2100\n");
-                } else {
-                    currUser.viewCalendarByWeek(cal);
+                while (cal == null) {
+                    System.out.printf("Please enter a valid day between year 2000 and 2100, in YYYY-MM-DD format\n");
+                    dayOfWeek = s.nextLine() + "-1-0";
+                    cal = Event.parseTime(dayOfWeek);
                 }
-                break;
-
+                currUser.viewCalendarByWeek(cal);
+                break; 
             case 7:
                 return;
             default:
