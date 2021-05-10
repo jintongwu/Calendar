@@ -215,7 +215,7 @@ public class User implements IUser {
                 break;
             }
         }
-
+        
         // if the start time of the first event is after the start time input,
         // add the free time before the first event
         if (events.get(currIndex).getStartTime().after(startTime)) {
@@ -224,12 +224,11 @@ public class User implements IUser {
         }
         int nextIndex = currIndex + 1;
 
-        // while the ending time of next event is after input end time, enter loop
-        while (events.get(nextIndex).getEndTime().after(endTime)) {
-
+        // while the ending time of this event is between bounds, enter loop
+        while (currIndex < events.size() && events.get(currIndex).getEndTime().before(endTime) && events.get(currIndex).getEndTime().after(startTime)) {
             // if the start time of next event is after input end time, add free time
             // between current event and end time
-            if (events.get(nextIndex).getStartTime().after(endTime)) {
+            if (nextIndex >= events.size() || events.get(nextIndex).getStartTime().after(endTime)) {
                 Calendar[] tuple = {events.get(currIndex).getEndTime(), endTime};
                 list.add(tuple);
 
