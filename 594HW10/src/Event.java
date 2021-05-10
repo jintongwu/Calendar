@@ -12,10 +12,12 @@ public class Event implements IEvent {
     protected List<Integer> attendeeIDs;
 
 
-    public Event(String startTime, String endTime, String eventName, List<Integer> listAttendees) throws IllegalArgumentException {
+    public Event(String startTime, String endTime, String eventName, 
+            List<Integer> listAttendees) throws IllegalArgumentException {
         
         if (startTime == null || endTime == null) {
-            throw new IllegalArgumentException("Invalid Arguemnt: startTime and endTime must be speficified");
+            throw new IllegalArgumentException(
+                    "Invalid Arguemnt: startTime and endTime must be speficified");
         }
         
         this.startTime = parseTime(startTime);
@@ -23,18 +25,21 @@ public class Event implements IEvent {
         
         // Illegal Arguments
         if (this.startTime == null || this.endTime == null) {
-            throw new IllegalArgumentException("Invalid Arguemnt: Input time is not in valid format, "
+            throw new IllegalArgumentException(
+                    "Invalid Arguemnt: Input time is not in valid format, "
                     + "please enter year-month-day-hour(0-24)-minute, separated by dash -");
         }
         if (!isValidTime(this.startTime) || !isValidTime(this.endTime)) {
-            throw new IllegalArgumentException("Invalid Arguemnt: Start Time or End Time must be after 2000-1-1-00-00"
+            throw new IllegalArgumentException(
+                    "Invalid Arguemnt: Start Time or End Time must be after 2000-1-1-00-00"
                     + "and before 2100-12-31-23-59");
         }
         if (this.startTime.after(this.endTime)) {
             throw new IllegalArgumentException("Invalid Arguemnt: Start Time is after End Time");
         }
         if (eventName == null || eventName.length() < 1) {
-            throw new IllegalArgumentException("Invalid Arguemnt: Must give event a valid short name");
+            throw new IllegalArgumentException(
+                    "Invalid Arguemnt: Must give event a valid short name");
         }
         
         // set first day of the week
@@ -133,8 +138,8 @@ public class Event implements IEvent {
     }
 
     @Override
-    public boolean changeStartTime(String Stime) {
-        Calendar time = parseTime(Stime);
+    public boolean changeStartTime(String sTime) {
+        Calendar time = parseTime(sTime);
         
         if (time == null) {
             return false;
@@ -150,9 +155,9 @@ public class Event implements IEvent {
 
 
     @Override
-    public boolean changeEndTime(String Etime) {
+    public boolean changeEndTime(String eTime) {
         
-        Calendar time = parseTime(Etime);
+        Calendar time = parseTime(eTime);
         
         if (time == null) {
             return false;

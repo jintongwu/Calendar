@@ -11,13 +11,13 @@ public class User implements IUser {
     protected int constraintStart;
     protected int constraintEnd;
 
-    public User (String name, int id) {
+    public User(String name, int id) {
         this.userName = name;
         this.userID = id;
         this.events = new LinkedList<IEvent>();
     }
     
-    public User (String name, int id, int constraintStart, int constraintEnd) {
+    public User(String name, int id, int constraintStart, int constraintEnd) {
         this.userName = name;
         this.userID = id;
         this.events = new LinkedList<IEvent>();
@@ -32,7 +32,8 @@ public class User implements IUser {
     }
 
     @Override
-    public boolean addEvent(String startTime, String endTime, String eventName, List<Integer> listAttendees) {
+    public boolean addEvent(String startTime, String endTime, 
+            String eventName, List<Integer> listAttendees) {
         try {
             IEvent event = new Event(startTime, endTime, eventName, listAttendees);
 
@@ -49,7 +50,7 @@ public class User implements IUser {
                     // new one is added to the second
                 int i = 0;
                 IEvent tmp = null;
-                while(i < this.events.size()) {
+                while (i < this.events.size()) {
                     tmp = this.events.get(i);
                     if (tmp.getStartTime().after(event.getStartTime())) {
                         break;
@@ -82,7 +83,7 @@ public class User implements IUser {
         // find the event and delete and return
         int i = 0;
         IEvent tmp = null;
-        while(i < this.events.size()) {
+        while (i < this.events.size()) {
             tmp = this.events.get(i);
             if (tmp.getEventName().equals(eventName)) {
                 this.events.remove(i);
@@ -107,7 +108,7 @@ public class User implements IUser {
         // find the event and delete and return
         int i = 0;
         IEvent tmp = null;
-        while(i < this.events.size()) {
+        while (i < this.events.size()) {
             tmp = this.events.get(i);
             if (tmp.getStartTime().after(now)) {
                 return tmp;
@@ -129,7 +130,7 @@ public class User implements IUser {
         // find the event and delete and return
         int i = 0;
         IEvent tmp = null;
-        while(i < this.events.size()) {
+        while (i < this.events.size()) {
             tmp = this.events.get(i);
             if (tmp.getEventName().equals(name)) {
                 return tmp;
@@ -158,7 +159,8 @@ public class User implements IUser {
     }
     
     /**
-     * Helper function to modify the input time of the viewCalendarByWeek() to the the Monday of that week
+     * Helper function to modify the input time of the 
+     * viewCalendarByWeek() to the the Monday of that week
      * @param dayInTargetWeek
      */
     protected static void mondayFinder(Calendar dayInTargetWeek) {
@@ -278,6 +280,8 @@ public class User implements IUser {
     /*****************************************************************************/
     
     /**** SYSTEM.OUT method START *****/
+    
+    /**** NOTE: These methods are not test in the JUnit Tests ****/
 
     @Override
     public void printEvent(IEvent event) {   
@@ -297,7 +301,7 @@ public class User implements IUser {
         // get all even that starts on target day
         int i = 0;
         IEvent tmp = null;
-        while(i < this.events.size()) {
+        while (i < this.events.size()) {
             tmp = this.events.get(i);
             if (checkDay(targetDate, tmp.getStartTime())) {
                 day.add(tmp);
@@ -336,13 +340,16 @@ public class User implements IUser {
         
         // print header
         System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", ICalendarApp.LINESEPARATE, " ", dayInTargetWeek);
-        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", ICalendarApp.LINESEPARATE,
-                view[0][0], view[0][1], days, view[0][2], days + 1, view[0][3], days + 2, 
-                view[0][4], days + 3, view[0][5], days + 4, view[0][6], days + 5, view[0][7], days + 6);
+        System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n", 
+                ICalendarApp.LINESEPARATE,
+                view[0][0], view[0][1], days, view[0][2], days + 1, 
+                view[0][3], days + 2, view[0][4], days + 3, view[0][5], 
+                days + 4, view[0][6], days + 5, view[0][7], days + 6);
         
         // print event by start time
         for (int i = 1; i < 14; i ++) {
-            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", ICalendarApp.LINESEPARATE,
+            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", 
+                    ICalendarApp.LINESEPARATE,
                     view[i][0], view[i][1], view[i][2], view[i][3],
                     view[i][4], view[i][5], view[i][6], view[i][7]);
         }
@@ -351,7 +358,8 @@ public class User implements IUser {
     }
     
     /**
-     * Helper function to add hard-copies of event name within the week calendar view to the view martix
+     * Helper function to add hard-copies of event 
+     * name within the week calendar view to the view martix
      * @param dayInTargetWeek
      * @param view
      */
@@ -373,25 +381,24 @@ public class User implements IUser {
         // get names of events for each hour
         // stored in list
         for (int i = 1; i < 8; i ++) {
-           for (IEvent e : this.events) {  
-               Calendar startTime = e.getStartTime();
-               Calendar endTime = e.getEndTime();
-//               System.out.println(e.getEventName());
-               // add curr events names to the string list of according hours
-               // from start to end, both inclusive
-               if (startTime.after(start) && startTime.before(end)) {
-                   int startH = startTime.get(Calendar.HOUR_OF_DAY);
-                   int endH = endTime.get(Calendar.HOUR_OF_DAY);
-                   for (int j = startH - 7; j < Math.min(endH - 7, 14); j ++) {
-                       if (viewEvents[j][i] == null) {
-                           viewEvents[j][i] = new LinkedList<String>();
-                       }
-                       viewEvents[j][i].add(e.getEventName());
-                   }          
-               }
-           }
-           start.add(Calendar.DAY_OF_MONTH, 1);
-           end.add(Calendar.DAY_OF_MONTH, 1);
+            for (IEvent e : this.events) {
+                Calendar startTime = e.getStartTime();
+                Calendar endTime = e.getEndTime();
+                // add curr events names to the string list of according hours
+                // from start to end, both inclusive
+                if (startTime.after(start) && startTime.before(end)) {
+                    int startH = startTime.get(Calendar.HOUR_OF_DAY);
+                    int endH = endTime.get(Calendar.HOUR_OF_DAY);
+                    for (int j = startH - 7; j < Math.min(endH - 7, 14); j++) {
+                        if (viewEvents[j][i] == null) {
+                            viewEvents[j][i] = new LinkedList<String>();
+                        }
+                        viewEvents[j][i].add(e.getEventName());
+                    }
+                }
+            }
+            start.add(Calendar.DAY_OF_MONTH, 1);
+            end.add(Calendar.DAY_OF_MONTH, 1);
         }
         
         
@@ -404,7 +411,8 @@ public class User implements IUser {
                     if (viewEvents[j][i].size() == 1) {
                         // add "..." if the string to too long to display
                         if (viewEvents[j][i].get(0).length() > 14) {
-                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14) + ICalendarApp.etc;
+                            view[j][i] = viewEvents[j][i].get(0).substring(0, 
+                                    14) + ICalendarApp.etc;
                         } else {
                             view[j][i] = new String(viewEvents[j][i].get(0));
                         }
@@ -413,7 +421,7 @@ public class User implements IUser {
                     }
                 }
             }          
-         }
+        }
     }
     
     /**** SYSTEM.OUT method END *****/
