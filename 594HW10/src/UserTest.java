@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -235,18 +236,80 @@ public class UserTest {
 
     }
     @Test
-    public void testgetAllFreeTime() {
+    public void testgetAllFreeTime1() {
         IUser user = new User("amy", 1, 8, 18);
         user.addEvent("2021-5-9-9-0", "2021-5-9-10-0", "yoga", null);
         user.addEvent("2021-5-9-11-0", "2021-5-9-16-0", "work", null);
-        System.out.println(user.getEvents().get(0).getStartTime());
-        Calendar t1 = new GregorianCalendar(2021, 5 , 9, 7, 0);
-        Calendar t2 = new GregorianCalendar(2021, 5 , 9, 19, 0);
+        Calendar t1 = new GregorianCalendar(2021, 4 , 9, 7, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4 , 9, 19, 0);
         List<Calendar[]> l = user.getAllFreeTime(t1, t2);
+        assertEquals(7, l.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(9, l.get(0)[1].get(Calendar.HOUR_OF_DAY));
+
+        assertEquals(10, l.get(1)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(11, l.get(1)[1].get(Calendar.HOUR_OF_DAY));
+        
+        assertEquals(16, l.get(2)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(19, l.get(2)[1].get(Calendar.HOUR_OF_DAY));
     }
-//        assertEquals(7, l.get(0)[0].get(Calendar.HOUR_OF_DAY));
-//        assertEquals(9, l.get(0)[1].get(Calendar.HOUR_OF_DAY));
+    
+    @Test
+    public void testgetAllFreeTime2() {
+        IUser user = new User("amy", 1, 8, 18);
+        user.addEvent("2021-5-9-9-0", "2021-5-9-10-0", "yoga", null);
+        user.addEvent("2021-5-9-11-0", "2021-5-9-16-0", "work", null);
+        user.addEvent("2021-5-9-17-0", "2021-5-9-20-0", "wind down", null);
+        Calendar t1 = new GregorianCalendar(2021, 4 , 9, 7, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4 , 9, 19, 0);
+        List<Calendar[]> l = user.getAllFreeTime(t1, t2);
+        assertEquals(7, l.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(9, l.get(0)[1].get(Calendar.HOUR_OF_DAY));
 
+        assertEquals(10, l.get(1)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(11, l.get(1)[1].get(Calendar.HOUR_OF_DAY));
+        
+        assertEquals(16, l.get(2)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(17, l.get(2)[1].get(Calendar.HOUR_OF_DAY));
+    }
+    
+    @Test
+    public void testgetAllFreeTime3() {
+        IUser user = new User("amy", 1, 8, 18);
+        user.addEvent("2021-5-9-6-0", "2021-5-9-10-0", "yoga", null);
+        user.addEvent("2021-5-9-11-0", "2021-5-9-16-0", "work", null);
+        user.addEvent("2021-5-9-17-0", "2021-5-9-20-0", "wind down", null);
+        Calendar t1 = new GregorianCalendar(2021, 4 , 9, 7, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4 , 9, 19, 0);
+        List<Calendar[]> l = user.getAllFreeTime(t1, t2);
 
-
+        assertEquals(10, l.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(11, l.get(0)[1].get(Calendar.HOUR_OF_DAY));
+        
+        assertEquals(16, l.get(1)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(17, l.get(1)[1].get(Calendar.HOUR_OF_DAY));
+    }
+    
+    @Test
+    public void testGetAvailableTime() {
+        IUser user = new User("amy", 1, 8, 18);
+        List<Calendar[]> list = new ArrayList<>();
+        Calendar t1 = new GregorianCalendar(2021, 4 , 9, 7, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4 , 9, 10, 0);
+        Calendar[] tuple1 = {t1, t2};
+        
+        Calendar t3 = new GregorianCalendar(2021, 4 , 9, 14, 0);
+        Calendar t4 = new GregorianCalendar(2021, 4 , 9, 19, 0);
+        Calendar[] tuple2 = {t3, t4};
+        
+        list.add(tuple1);
+        list.add(tuple2);
+        
+        List<Calendar[]> avail = user.getAvailableTime(list);
+        
+        assertEquals(8, avail.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(10, avail.get(0)[1].get(Calendar.HOUR_OF_DAY));
+        
+        assertEquals(14, avail.get(1)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(18, avail.get(1)[1].get(Calendar.HOUR_OF_DAY));
+    }
 }

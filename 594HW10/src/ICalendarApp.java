@@ -75,7 +75,7 @@ public interface ICalendarApp {
      * @param users
      * @return a list of calendar array, each array contains start time and end time
      */
-    public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime, List<IUser> users);
+    public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime);
     
     public int getNextAvailID();
     

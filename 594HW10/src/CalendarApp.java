@@ -68,7 +68,7 @@ public class CalendarApp implements ICalendarApp {
                 Calendar[] tuple = {start, c2.get(index)[1]};
                 list.add(tuple);
                 index++;
-            } else if (c2.get(index)[0].before(start) && c2.get(index)[1].after(end)) {
+            } else if (c2.get(index)[0].before(start) && (c2.get(index)[1].after(end) || c2.get(index)[1].equals(end))) {
                 Calendar[] tuple = {start, end};
                 list.add(tuple);
                 continue;
@@ -96,16 +96,18 @@ public class CalendarApp implements ICalendarApp {
     }
 
     @Override
-    public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime, List<IUser> users) {
+    public List<Calendar[]> findCommonMeetingTime(Calendar startTime, Calendar endTime) {
         // if list of users is empty, return null
-        if (users.isEmpty()) {
+        if (this.users.isEmpty()) {
             return null;
         }
-        List<Calendar[]> fullList = users.get(0).getAllFreeTime(startTime, endTime);
-        List<Calendar[]> list = users.get(0).getAvailableTime(fullList);
-        for (int i = 1; i < users.size(); i++) {
-            List<Calendar[]> fullList2 = users.get(i).getAllFreeTime(startTime, endTime);
-            List<Calendar[]> list2 = users.get(i).getAvailableTime(fullList2);
+        List<Calendar[]> fullList = this.users.get(0).getAllFreeTime(startTime, endTime);
+        List<Calendar[]> list = this.users.get(0).getAvailableTime(fullList);
+                
+        for (int i = 1; i < this.users.size(); i++) {
+            List<Calendar[]> fullList2 = this.users.get(i).getAllFreeTime(startTime, endTime);
+            List<Calendar[]> list2 = this.users.get(i).getAvailableTime(fullList2);
+            
             list = this.findOverlap(list, list2);
             if (list.isEmpty()) {
                 break;
