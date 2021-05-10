@@ -1,6 +1,7 @@
 import java.util.Calendar;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CalendarInteractive {
@@ -30,7 +31,41 @@ public class CalendarInteractive {
                         break;
                         
                     case 2: // find common time
-                        // TODO: implement this
+                        if (app.getUsers().size() < 2) {
+                            System.out.println("No enough users:");
+                            break;
+                        }
+
+                        String startTime;
+                        String endTime;
+                        Calendar start;
+                        Calendar end;
+                        while (true) {
+                            // get input
+                            System.out.println("Enter start time (format YYYY-MM-DD-HH-MM):");
+                            startTime = s.nextLine();
+                            System.out.println("Enter end time (format YYYY-MM-DD-HH-MM):");
+                            endTime = s.nextLine();
+
+                            start = Event.parseTime(startTime);
+                            end = Event.parseTime(endTime);
+
+                            // check input
+                            if (start == null || end == null) {
+                                System.out.printf(
+                                        "Invalid input. Please enter a correctly formated time period between year 2000 and 2100\n\n");
+                                continue;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        List<Calendar[]> times = app.findCommonMeetingTime(start, end);
+                        if (times == null || times.size() == 0) {
+                            System.out.printf("No common time found!\n\n");
+                        } else {
+                            printCommonTime(times);
+                        }
                         break;
                         
                     case 3: // show all users
@@ -176,6 +211,13 @@ public class CalendarInteractive {
             }
 
             System.out.printf("\n");
+        }
+    }
+    
+    private void printCommonTime(List<Calendar[]> times) {
+        System.out.println("Potential Meeting Time Slots");
+        for (Calendar[] tuple : times) {
+            System.out.printf("%tF %<tR - %tR\n", tuple[0], tuple[1]);
         }
     }
 
