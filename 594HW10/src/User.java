@@ -331,6 +331,13 @@ public class User implements IUser {
         // get templates
         String[][] view = ICalendarApp.WEEKVIEW.clone();
         
+        String empty = "";
+        for (int i = 1; i < 14; i ++) {
+            for (int j = 1; j < 8; j ++) {
+                view[i][j] = empty;
+            }
+        }
+        
         // read event string from calendar
         // populate view with HARD-COPYs of event names
         viewHelper(dayInTargetWeek, view);
