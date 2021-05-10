@@ -24,20 +24,20 @@ public class CalendarInteractive {
                 int id = s.nextInt();
                 s.nextLine();
                 switch (id) {
-                    case 1:
+                    case 1: // user log in
                         System.out.println("Please Enter your name:");
                         user(s.nextLine());
                         break;
                         
-                    case 2:
+                    case 2: // find common time
                         // TODO: implement this
                         break;
                         
-                    case 3:
+                    case 3: // show all users
                         if (app.getUsers().size()==0) {
                             System.out.println("Zero User!!");
                         } else {
-                            System.out.println("Available User:");
+                            System.out.printf("There are %d users of this app:\n", app.getUsers().size());
                             for (IUser u : app.getUsers()) {
                                 System.out.println(u.getUserName());
                             }
@@ -78,13 +78,15 @@ public class CalendarInteractive {
             int id = s.nextInt();
             s.nextLine();
             switch (id) {
-                case 1:
+                
+                case 1: // create event
                
                     String eventName;
                     String startTime;
                     String endTime;
                     String attendee;
                     while (true) {
+                        // get input
                         System.out.println("Enter event name:");
                         eventName = s.nextLine();
                         System.out.println("Enter start time (format YYYY-MM-DD-HH-MM):");
@@ -93,7 +95,8 @@ public class CalendarInteractive {
                         endTime = s.nextLine();
                         System.out.println("Enter attendee names (format name-name...):");
                         attendee = s.nextLine();
-                        // TODO: attendee
+                        
+                        // check input
                         if (!currUser.addEvent(startTime, endTime, eventName, app.parseAttendee(attendee))) {
                             System.out.printf(
                                     "Invalid input. Please enter a correctly formated time period between year 2000 and 2100\n\n",
@@ -105,7 +108,8 @@ public class CalendarInteractive {
                     }
                     System.out.printf("Event \"%s\" added!\n", eventName);
                     break;
-                case 2:
+                    
+                case 2: // delete event
                     System.out.println("Enter event name:");
                     String target = s.nextLine();
     
@@ -117,7 +121,8 @@ public class CalendarInteractive {
                     }
     
                     break;
-                case 3:
+                    
+                case 3: // next event
                     IEvent next = currUser.nextEvent();
                     if (next != null) {
                         System.out.printf("The upcoming event for user %s:\n", currUser.getUserName());
@@ -127,7 +132,8 @@ public class CalendarInteractive {
                         System.out.printf("No upcoming event for user %s:\n", currUser.getUserName());
                     }
                     break;
-                case 4:
+                    
+                case 4: // search event
                     System.out.println("Enter event name:");
                     String search = s.nextLine();
                     IEvent result = currUser.searchEvent(search);
@@ -139,7 +145,8 @@ public class CalendarInteractive {
                         System.out.printf("No such event exist %s!\n");
                     }
                     break;
-                case 5:
+                    
+                case 5: // view daily schedule
                     System.out.println("Enter date: (format: YYYY-MM-DD)");
                     String date = s.nextLine() + "-1-0";
                     Calendar day = Event.parseTime(date);
@@ -150,7 +157,8 @@ public class CalendarInteractive {
                     }
                     currUser.viewCalendarByDay(day);
                     break;
-                case 6:
+                    
+                case 6: // view weekly schedule
                     System.out.println("Enter a date of the week you want to view: (format: YYYY-MM-DD)");
                     String dayOfWeek = s.nextLine() + "-1-0";
                     Calendar cal = Event.parseTime(dayOfWeek);
