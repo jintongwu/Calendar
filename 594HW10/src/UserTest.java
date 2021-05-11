@@ -136,7 +136,7 @@ public class UserTest {
         String first =  "" + copy.get(Calendar.YEAR) +  "-" +
                 (curr.get(Calendar.MONTH) + 1) + "-" +
                 copy.get(Calendar.DAY_OF_MONTH) + "-" +
-                (copy.get(Calendar.HOUR_OF_DAY)+1) + "-" +
+                (copy.get(Calendar.HOUR_OF_DAY) + 1) + "-" +
                 copy.get(Calendar.MINUTE);
         u.addEvent(first, "2100-5-7-16-0", "first", new LinkedList<Integer>());
 
@@ -148,7 +148,7 @@ public class UserTest {
         String next =  "" + curr.get(Calendar.YEAR) + "-" +
                 (curr.get(Calendar.MONTH) + 1) + "-" +
                 curr.get(Calendar.DAY_OF_MONTH) + "-" +
-                (curr.get(Calendar.HOUR_OF_DAY)+1) + "-" +
+                (curr.get(Calendar.HOUR_OF_DAY) + 1) + "-" +
                 curr.get(Calendar.MINUTE);
         u.addEvent(next, "2100-5-11-16-0", "next", new LinkedList<Integer>());
 
@@ -195,44 +195,42 @@ public class UserTest {
 
     @Test
     public void testMondayFinder() {
-       Calendar cal = new GregorianCalendar(2021, 4, 9, 8, 0);
-       cal.setFirstDayOfWeek(Calendar.MONDAY);
+        Calendar cal = new GregorianCalendar(2021, 4, 9, 8, 0);
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
 
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 8);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
+        cal.set(Calendar.DAY_OF_MONTH, 7);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
-       cal.set(Calendar.DAY_OF_MONTH, 8);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
-       cal.set(Calendar.DAY_OF_MONTH, 7);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 5);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
-       cal.set(Calendar.DAY_OF_MONTH, 6);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 4);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
-       cal.set(Calendar.DAY_OF_MONTH, 5);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
-
-       cal.set(Calendar.DAY_OF_MONTH, 4);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
-
-       cal.set(Calendar.DAY_OF_MONTH, 3);
-       User.mondayFinder(cal);
-       assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
-       assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 3);
+        User.mondayFinder(cal);
+        assertEquals(Calendar.MONDAY, cal.get(Calendar.DAY_OF_WEEK));
+        assertEquals(3, cal.get(Calendar.DAY_OF_MONTH));
 
     }
     @Test

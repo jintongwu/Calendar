@@ -11,50 +11,55 @@ public class Event implements IEvent {
     protected Calendar endTime;
     protected List<Integer> attendeeIDs;
 
+    public Event(String startTime, String endTime, String eventName, List<Integer> listAttendees)
+            throws IllegalArgumentException {
 
-    public Event(String startTime, String endTime, String eventName, 
-            List<Integer> listAttendees) throws IllegalArgumentException {
-        
         if (startTime == null || endTime == null) {
             throw new IllegalArgumentException(
                     "Invalid Arguemnt: startTime and endTime must be speficified");
         }
-        
+
         this.startTime = parseTime(startTime);
         this.endTime = parseTime(endTime);
-        
+
         // Illegal Arguments
+        // time input not valid
         if (this.startTime == null || this.endTime == null) {
             throw new IllegalArgumentException(
                     "Invalid Arguemnt: Input time is not in valid format, "
                     + "please enter year-month-day-hour(0-24)-minute, separated by dash -");
         }
+        // time out of range
         if (!isValidTime(this.startTime) || !isValidTime(this.endTime)) {
-            throw new IllegalArgumentException(
-                    "Invalid Arguemnt: Start Time or End Time must be after 2000-1-1-00-00"
+            throw new IllegalArgumentException("Invalid Arguemnt: "
+                    + "Start Time or End Time must be after 2000-1-1-00-00"
                     + "and before 2100-12-31-23-59");
         }
+        // start time is after end time
         if (this.startTime.after(this.endTime)) {
             throw new IllegalArgumentException("Invalid Arguemnt: Start Time is after End Time");
         }
+        // not event name input
         if (eventName == null || eventName.length() < 1) {
             throw new IllegalArgumentException(
                     "Invalid Arguemnt: Must give event a valid short name");
         }
-        
+
         // set first day of the week
         this.startTime.setFirstDayOfWeek(Calendar.MONDAY);
         this.endTime.setFirstDayOfWeek(Calendar.MONDAY);
-        
+
         // assign variable
         this.eventName = eventName;
         this.description = "";
         this.attendeeIDs = listAttendees;
-        
+
     }
-    
+
     /**
-     * helper function to determine if a time is within the valid range defined by this application
+     * helper function to determine if a time is within the valid range defined by
+     * this application
+     * 
      * @param time
      * @return
      */
@@ -64,26 +69,27 @@ public class Event implements IEvent {
         }
         return time.after(ICalendarApp.MINCAL) && time.before(ICalendarApp.MAXCAL);
     }
-    
+
     /**
      * Helper function to parse the input string date to Calendar object
+     * 
      * @param time
      * @return
      */
     protected static Calendar parseTime(String time) {
         String[] working = time.split("-");
-        
+
         // check input length
         if (working.length != 5) {
             return null;
         }
-        
+
         int year;
         int month;
         int day;
         int hour;
         int min;
-        
+
         // check input format
         try {
             year = Integer.parseInt(working[0]);
@@ -94,7 +100,7 @@ public class Event implements IEvent {
         } catch (NumberFormatException e) {
             return null;
         }
-        
+
         // check input range
         if (year < 2000 || year > 2100) {
             return null;
@@ -107,13 +113,13 @@ public class Event implements IEvent {
         } else if (min < 0 || min > 59) {
             return null;
         }
-        
+
+        // create calendar
         Calendar ret = new GregorianCalendar(year, month - 1, day, hour, min);
-        // important! month in Calendar is actual month - 1 
-        return ret; 
+        // important! month in Calendar is actual month - 1
+        return ret;
     }
-    
-    
+
     @Override
     public void editEventName(String name) {
         this.eventName = name;
@@ -127,8 +133,8 @@ public class Event implements IEvent {
     @Override
     public List<Integer> getAttendee() {
         List<Integer> list = new LinkedList<Integer>();
-        
-        // return a list of NON-duplicates
+
+        // return a list of NON-duplicates attendee IDs
         for (int i = 0; i < attendeeIDs.size(); i++) {
             if (!list.contains(attendeeIDs.get(i))) {
                 list.add((int) attendeeIDs.get(i));
@@ -140,11 +146,11 @@ public class Event implements IEvent {
     @Override
     public boolean changeStartTime(String sTime) {
         Calendar time = parseTime(sTime);
-        
+
         if (time == null) {
             return false;
         }
-        
+
         // validate time
         if (time.after(this.endTime) || !isValidTime(time)) {
             return false;
@@ -153,16 +159,15 @@ public class Event implements IEvent {
         return true;
     }
 
-
     @Override
     public boolean changeEndTime(String eTime) {
-        
+
         Calendar time = parseTime(eTime);
-        
+
         if (time == null) {
             return false;
         }
-        
+
         // validate time
         if (time.before(this.startTime) || !isValidTime(time)) {
             return false;
@@ -177,9 +182,10 @@ public class Event implements IEvent {
         if (hours < 0 || mins < 0 || (hours == 0 && mins == 0)) {
             return false;
         }
-        
-        // make a copy of input 
+
+        // make a copy of input
         Calendar newEnd = (Calendar) this.startTime.clone();
+        // calculate new end time based on duration since start time
         newEnd.add(Calendar.HOUR_OF_DAY, hours);
         newEnd.add(Calendar.MINUTE, mins);
         this.endTime = newEnd;

@@ -20,7 +20,8 @@ public interface IUser extends Comparable<IUser> {
      * @param startTime
      * @return successful in adding event?
      */
-    public boolean addEvent(String startTime, String endTime, String eventName, List<Integer> listAttendees);
+    public boolean addEvent(String startTime, String endTime, 
+            String eventName, List<Integer> listAttendees);
 
     /**
      * Enable user to delete an event identified by name return true if the event is

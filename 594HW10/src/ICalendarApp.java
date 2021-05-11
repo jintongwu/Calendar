@@ -13,35 +13,27 @@ public interface ICalendarApp {
     final static Calendar MAXCAL = new GregorianCalendar(2100, 11, 31, 23, 59);
 
     // view templates
-    final static String etc = "...";
-    final static String LINESEPARATE = "-------------------------------------------------------------"
-            + "--------------------------------------------------------------------------------------";
-    final static String[][] WEEKVIEW = new String[][] {{"", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"},
-                                                        {"  8 AM", "", "", "", "", "", "", ""},
-                                                        {"  9 AM", "", "", "", "", "", "", ""},
-                                                        {" 10 AM", "", "", "", "", "", "", ""},
-                                                        {" 11 AM", "", "", "", "", "", "", ""},
-                                                        {" 12 PM", "", "", "", "", "", "", ""},
-                                                        {"  1 PM", "", "", "", "", "", "", ""},
-                                                        {"  2 PM", "", "", "", "", "", "", ""},
-                                                        {"  3 PM", "", "", "", "", "", "", ""},
-                                                        {"  4 PM", "", "", "", "", "", "", ""},
-                                                        {"  5 PM", "", "", "", "", "", "", ""},
-                                                        {"  6 PM", "", "", "", "", "", "", ""},
-                                                        {"  7 PM", "", "", "", "", "", "", ""},
-                                                        {"  8 PM", "", "", "", "", "", "", ""}};
+    final static String ETC = "...";
+    final static String LINESEPARATE = "-----------------------------"
+            + "--------------------------------"
+            + "--------------------------------"
+            + "------------------------------------------------------";
+    final static String[][] WEEKVIEW = new String[][] {
+        {"", "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"},
+        {"  8 AM", "", "", "", "", "", "", ""},
+        {"  9 AM", "", "", "", "", "", "", ""},
+        {" 10 AM", "", "", "", "", "", "", ""},
+        {" 11 AM", "", "", "", "", "", "", ""},
+        {" 12 PM", "", "", "", "", "", "", ""},
+        {"  1 PM", "", "", "", "", "", "", ""},
+        {"  2 PM", "", "", "", "", "", "", ""},
+        {"  3 PM", "", "", "", "", "", "", ""},
+        {"  4 PM", "", "", "", "", "", "", ""},
+        {"  5 PM", "", "", "", "", "", "", ""},
+        {"  6 PM", "", "", "", "", "", "", ""},
+        {"  7 PM", "", "", "", "", "", "", ""},
+        {"  8 PM", "", "", "", "", "", "", ""}};
     
-    // TODO: Eric Suggestions
-    // Read calendar automatically
-    // Constraints for common meeting time
-    // Add event to everyone’s calendar
-    // File input to initialize calendar
-    // Scanner for user input in console
-
-    // TODO:
-    
-    // Shuke: Implement CalendarApp
-    // Jintong: Implement User + Event
 
     /**
      * Initialize a calendar application
