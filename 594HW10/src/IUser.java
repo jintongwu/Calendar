@@ -7,7 +7,6 @@ public interface IUser extends Comparable<IUser> {
     // Integer userID
     // String userName
 
-
     /**
      * Enable user to add an event, return true if the event is successfully added,
      * false if the event has duplicated name or has conflicts with another event
@@ -45,18 +44,19 @@ public interface IUser extends Comparable<IUser> {
      */
     public IEvent nextEvent();
 
-
     /**
-     * Print a day frame view of a user calendar,
-     * starting from 12am of the specified date
+     * Print a day frame view of a user calendar, starting from 12am of the
+     * specified date
+     * 
      * @param startDate
      * @param userID
      */
     public void viewCalendarByDay(Calendar targetDate);
 
     /**
-     * Print a week frame view of a user calendar,
-     * starting from the first of the specified date
+     * Print a week frame view of a user calendar, starting from the first of the
+     * specified date
+     * 
      * @param startDate
      * @param userID
      */
@@ -64,38 +64,61 @@ public interface IUser extends Comparable<IUser> {
 
     /**
      * Return the UserId
+     * 
      * @param id
      * @return
      */
     public int getUserID();
-    
+
+    /**
+     * Get name of the user
+     * 
+     * @return
+     */
     public String getUserName();
 
-
+    /**
+     * Setter for startConstraint
+     */
     public void editStartConstraint(int startConstraint);
 
+    /**
+     * Setter for endConstraint
+     */
     public void editEndConstraint(int endConstraint);
 
-    public List<IEvent> getEvents();
-    
-    
     /**
-     * get all the free time the user has, which is any time the user
-     * does not have an event
+     * Getter for list of event this user has
+     * 
+     * @return
+     */
+    public List<IEvent> getEvents();
+
+    /**
+     * get all the free time the user has, which is any time the user does not have
+     * an event
+     * 
      * @param startTime
      * @param endTime
      * @return a list of calendar pairs or start and end times
      */
     public List<Calendar[]> getAllFreeTime(Calendar startTime, Calendar endTime);
-    
+
     /**
-     * get all the available time, taking into consideration the time
-     * constraints the user set
+     * get all the available time, taking into consideration the time constraints
+     * the user set
+     * 
      * @param a list of free time
      * @return a list of available time
      */
-    
+
     public List<Calendar[]> getAvailableTime(List<Calendar[]> l);
 
+    /**
+     * Search a event by name in this list of events this user has
+     * 
+     * @param name
+     * @return
+     */
     IEvent searchEvent(String name);
 }
