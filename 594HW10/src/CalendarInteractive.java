@@ -122,6 +122,8 @@ public class CalendarInteractive {
                     String endTime;
                     String attendee;
                     List<IUser> users;
+                    List<Integer> list;
+                    
                     while (true) {
                         // get input
                         System.out.println("Enter event name:");
@@ -137,7 +139,7 @@ public class CalendarInteractive {
                         users = app.parseAttendee(attendee);
                         
                         // get attendee IDs
-                        List<Integer> list = new LinkedList<>();
+                        list = new LinkedList<>();
                         for (int i = 0; i < users.size(); i++) {
                             list.add(users.get(i).getUserID());
                         }
@@ -154,13 +156,9 @@ public class CalendarInteractive {
                     }
                     
                     // add event to all attendee, add reference, shallow copy
-                    for (IEvent e : currUser.getEvents()) {
-                        if (e.getEventName().equals(eventName)) {
-                            for (int i = 0; i < users.size(); i++) {
-                                if (currUser.getUserID() != users.get(i).getUserID()) {
-                                    ((User) users.get(i)).events.add(e);
-                                }
-                            }
+                    for (int i = 0; i < users.size(); i++) {
+                        if (currUser.getUserID() != users.get(i).getUserID()) {
+                            users.get(i).addEvent(startTime, endTime, eventName, list);
                         }
                     }
                     
