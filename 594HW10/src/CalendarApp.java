@@ -23,7 +23,7 @@ public class CalendarApp implements ICalendarApp {
 
     @Override
     public IUser addUser(String name) {
-        // creat a user with the provided name and assign ID
+        // create a user with the provided name and assign ID
         IUser user = new User(name, this.nextAvailID);
 
         // add the user into the calendar app

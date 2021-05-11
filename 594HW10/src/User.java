@@ -212,6 +212,12 @@ public class User implements IUser {
             return null;
         }
         List<Calendar[]> list = new ArrayList<>();
+        
+        if (this.events.size() == 0) {
+            Calendar[] tuple = {startTime, endTime};
+            list.add(tuple);
+            return list;
+        }
 
         // find the event at the start time
         int currIndex = 0;
