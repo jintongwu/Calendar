@@ -81,5 +81,5 @@ public interface ICalendarApp {
     
     public List<IUser> getUsers();
 
-    public List<Integer> parseAttendee(String input);
+    public List<IUser> parseAttendee(String input);
 }

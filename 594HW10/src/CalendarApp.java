@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ public class CalendarApp implements ICalendarApp {
         
     private List<IUser> users;
     private int nextAvailID;
+    private HashMap<Integer, IUser> map;
     
     public CalendarApp() {
         calendarInit();
@@ -16,6 +18,7 @@ public class CalendarApp implements ICalendarApp {
     public void calendarInit() {
         this.users = new ArrayList<IUser>();
         this.nextAvailID = 1;
+        this.map = new HashMap<>();
     }
 
     @Override
@@ -23,6 +26,7 @@ public class CalendarApp implements ICalendarApp {
         IUser user = new User(name, this.nextAvailID);
         users.add(user);
         this.nextAvailID++;
+        this.map.put(user.getUserID(), user);
         return user;
     }
 
@@ -128,17 +132,27 @@ public class CalendarApp implements ICalendarApp {
     }
 
     @Override
-    public List<Integer> parseAttendee(String input) {
-        List<Integer> res = new LinkedList<>();
+    public List<IUser> parseAttendee(String input) {
+        List<IUser> res = new LinkedList<>();
         
         String[] split = input.split("-");
         
         if (split.length > 0) {
             for (String name : split) {
+                boolean contain = false;
+                
+                // search for user
                 for (IUser u : this.users) {
                     if (u.getUserName().equals(name)) {
-                        res.add(u.getUserID());
+                        res.add(u);
+                        contain = true;
                     }
+                }
+                
+                // add user to calendar if not contained
+                if (!contain) {
+                    IUser add = this.addUser(name);
+                    res.add(add);
                 }
             }
         }

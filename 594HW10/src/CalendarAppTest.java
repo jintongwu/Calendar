@@ -227,10 +227,11 @@ public class CalendarAppTest {
         app.addUser("Jintong");
         app.addUser("Shuke");
 
-        List<Integer> attendee = app.parseAttendee("Jintong-Shuke-RANDOM");
-        assertEquals(2, attendee.size());
-        assertEquals(1, (int) attendee.get(0));
-        assertEquals(2, (int) attendee.get(1));
+        List<IUser> attendee = app.parseAttendee("Jintong-Shuke-RANDOM");
+        assertEquals(3, attendee.size());
+        assertEquals(1, (int) attendee.get(0).getUserID());
+        assertEquals(2, (int) attendee.get(1).getUserID());
+        assertEquals(3, (int) attendee.get(2).getUserID());
     }
 
 }

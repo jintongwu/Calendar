@@ -16,8 +16,9 @@ public class CalendarInteractive {
     }
 
     public void prompt() {
+
+        System.out.printf("------------------------\n  Welcome to Calendar!\n------------------------\n");
         while (true) {
-            System.out.println("Welcome to Calendar!");
             
             System.out.printf(
                     "ID of the operation:\n" + "1 - User log-in\n" + "2 - find common time\n" + "3 - show all users\n");
@@ -120,6 +121,7 @@ public class CalendarInteractive {
                     String startTime;
                     String endTime;
                     String attendee;
+                    List<IUser> users;
                     while (true) {
                         // get input
                         System.out.println("Enter event name:");
@@ -131,8 +133,17 @@ public class CalendarInteractive {
                         System.out.println("Enter attendee names (format name-name...):");
                         attendee = s.nextLine();
                         
+                        // get attendee
+                        users = app.parseAttendee(attendee);
+                        
+                        // get attendee IDs
+                        List<Integer> list = new LinkedList<>();
+                        for (int i = 0; i < users.size(); i++) {
+                            list.add(users.get(i).getUserID());
+                        }
+                        
                         // check input
-                        if (!currUser.addEvent(startTime, endTime, eventName, app.parseAttendee(attendee))) {
+                        if (!currUser.addEvent(startTime, endTime, eventName, list)) {
                             System.out.printf(
                                     "Invalid input. Please enter a correctly formated time period between year 2000 and 2100\n\n",
                                     eventName);
@@ -141,6 +152,18 @@ public class CalendarInteractive {
                             break;
                         } 
                     }
+                    
+                    // add event to all attendee, add reference, shallow copy
+                    for (IEvent e : currUser.getEvents()) {
+                        if (e.getEventName().equals(eventName)) {
+                            for (int i = 0; i < users.size(); i++) {
+                                if (currUser.getUserID() != users.get(i).getUserID()) {
+                                    ((User) users.get(i)).events.add(e);
+                                }
+                            }
+                        }
+                    }
+                    
                     System.out.printf("Event \"%s\" added!\n", eventName);
                     break;
                     

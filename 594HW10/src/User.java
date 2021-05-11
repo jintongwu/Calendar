@@ -66,6 +66,8 @@ public class User implements IUser {
                     this.events.add(i, event);
                 }
             }
+
+            
         } catch (IllegalArgumentException e) {
             // when the inputs to event constructor is invalid
             return false;
