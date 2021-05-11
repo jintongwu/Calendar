@@ -15,6 +15,8 @@ public class User implements IUser {
         this.userName = name;
         this.userID = id;
         this.events = new LinkedList<IEvent>();
+        this.constraintStart = 0;
+        this.constraintEnd = 0;
     }
     
     public User(String name, int id, int constraintStart, int constraintEnd) {
@@ -250,6 +252,9 @@ public class User implements IUser {
     
     @Override
     public List<Calendar[]> getAvailableTime(List<Calendar[]> l) {
+        if (this.constraintStart == 0 && this.constraintEnd == 0) {
+            return l;
+        }
         for (int i = 0; i < l.size(); i++) {
             // get the start and end hour of the i calendar pair
             int startHour = l.get(i)[0].get(Calendar.HOUR_OF_DAY);

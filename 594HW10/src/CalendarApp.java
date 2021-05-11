@@ -1,5 +1,7 @@
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -111,6 +113,15 @@ public class CalendarApp implements ICalendarApp {
             list = this.findOverlap(list, list2);
             if (list.isEmpty()) {
                 break;
+            }
+        }
+        
+        // delete events with the same start and end time
+        Iterator<Calendar[]> iter = list.iterator();
+        while(iter.hasNext()) {
+            Calendar[] item = iter.next();
+            if (item[0].equals(item[1])) {
+                iter.remove();
             }
         }
         
