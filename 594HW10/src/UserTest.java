@@ -127,32 +127,15 @@ public class UserTest {
 
     @Test
     public void testNextEvent() {
-        Calendar curr = Calendar.getInstance();
         assertEquals(0, u.getEvents().size());
         assertNull(u.nextEvent());
-
-        Calendar copy = (Calendar) curr.clone();
-        copy.add(Calendar.DAY_OF_MONTH, -1);
-        String first =  "" + copy.get(Calendar.YEAR) +  "-" +
-                (curr.get(Calendar.MONTH) + 1) + "-" +
-                copy.get(Calendar.DAY_OF_MONTH) + "-" +
-                (copy.get(Calendar.HOUR_OF_DAY)+1) + "-" +
-                copy.get(Calendar.MINUTE);
-        u.addEvent(first, "2100-5-7-16-0", "first", new LinkedList<Integer>());
-
+        u.addEvent("2001-5-6-12-0", "2010-5-10-16-0", "first", new LinkedList<Integer>());
 
         // no next event
         assertNull(u.nextEvent());
 
         // add next event
-        String next =  "" + curr.get(Calendar.YEAR) + "-" +
-                (curr.get(Calendar.MONTH) + 1) + "-" +
-                curr.get(Calendar.DAY_OF_MONTH) + "-" +
-                (curr.get(Calendar.HOUR_OF_DAY)+1) + "-" +
-                curr.get(Calendar.MINUTE);
-        u.addEvent(next, "2100-5-11-16-0", "next", new LinkedList<Integer>());
-
-
+        u.addEvent("2099-5-10-16-0", "2100-5-11-16-0", "next", new LinkedList<Integer>());
 
         assertEquals(2, u.getEvents().size());
         assertEquals("first", u.getEvents().get(0).getEventName());
