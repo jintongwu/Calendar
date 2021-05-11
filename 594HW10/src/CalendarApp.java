@@ -1,19 +1,21 @@
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class CalendarApp implements ICalendarApp {
-        
+
     private List<IUser> users;
     private int nextAvailID;
     private HashMap<Integer, IUser> map;
-    
+
     public CalendarApp() {
         calendarInit();
     }
-    
+
     @Override
     public void calendarInit() {
         this.users = new ArrayList<IUser>();
@@ -42,7 +44,7 @@ public class CalendarApp implements ICalendarApp {
         }
         return false;
     }
-    
+
     @Override
     public List<Calendar[]> findOverlap(List<Calendar[]> c1, List<Calendar[]> c2) {
         List<Calendar[]> list = new ArrayList<>();
@@ -55,18 +57,18 @@ public class CalendarApp implements ICalendarApp {
             // get start and end time for index i slot in calendar 1
             Calendar start = c1.get(i)[0];
             Calendar end = c1.get(i)[1];
-            
+
             // find calendar 2 slot with end time after slot i
             int index = 0;
             while(index < size2 && c2.get(index)[1].before(start)) {
                 index++;
             }
-            
+
             // if index reaches end of calendar 2, skip the loop
             if (index >= size2) {
                 continue;
             }
-            
+
             // if c2 event starts earlier, add slot starting the start time of slot i
             if (c2.get(index)[0].before(start) && c2.get(index)[1].before(end)) {
                 Calendar[] tuple = {start, c2.get(index)[1]};
@@ -77,11 +79,11 @@ public class CalendarApp implements ICalendarApp {
                 list.add(tuple);
                 continue;
             }
-            
+
          // if index reaches end of calendar 2, skip the loop
             if (index >= size2) {
                 continue;
-                
+
             }
             while (index < size2 && c2.get(index)[0].before(end)) {
                 if (c2.get(index)[1].after(end)) {
@@ -92,10 +94,10 @@ public class CalendarApp implements ICalendarApp {
                 }
                 index++;
             }
-            
+
         }
-        
-        
+
+
         return list;
     }
 
@@ -107,17 +109,26 @@ public class CalendarApp implements ICalendarApp {
         }
         List<Calendar[]> fullList = this.users.get(0).getAllFreeTime(startTime, endTime);
         List<Calendar[]> list = this.users.get(0).getAvailableTime(fullList);
-                
+
         for (int i = 1; i < this.users.size(); i++) {
             List<Calendar[]> fullList2 = this.users.get(i).getAllFreeTime(startTime, endTime);
             List<Calendar[]> list2 = this.users.get(i).getAvailableTime(fullList2);
-            
+
             list = this.findOverlap(list, list2);
             if (list.isEmpty()) {
                 break;
             }
         }
-        
+
+        // delete events with the same start and end time
+        Iterator<Calendar[]> iter = list.iterator();
+        while(iter.hasNext()) {
+            Calendar[] item = iter.next();
+            if (item[0].equals(item[1])) {
+                iter.remove();
+            }
+        }
+
         return list;
     }
 
@@ -134,13 +145,13 @@ public class CalendarApp implements ICalendarApp {
     @Override
     public List<IUser> parseAttendee(String input) {
         List<IUser> res = new LinkedList<>();
-        
+
         String[] split = input.split("-");
-        
+
         if (split.length > 0) {
             for (String name : split) {
                 boolean contain = false;
-                
+
                 // search for user
                 for (IUser u : this.users) {
                     if (u.getUserName().equals(name)) {
@@ -148,7 +159,7 @@ public class CalendarApp implements ICalendarApp {
                         contain = true;
                     }
                 }
-                
+
                 // add user to calendar if not contained
                 if (!contain) {
                     IUser add = this.addUser(name);
@@ -159,6 +170,6 @@ public class CalendarApp implements ICalendarApp {
         return res;
     }
 
-    
+
 
 }

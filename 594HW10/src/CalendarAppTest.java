@@ -202,8 +202,8 @@ public class CalendarAppTest {
 
         user2.addEvent("2021-5-9-10-0", "2021-5-9-11-0", "yoga", null);
         user2.addEvent("2021-5-9-16-0", "2021-5-9-20-0", "wind down", null);
-        user1.editStartConstraint(6);
-        user1.editEndConstraint(20);
+        user2.editStartConstraint(6);
+        user2.editEndConstraint(20);
 
         Calendar t1 = new GregorianCalendar(2021, 4, 9, 9, 0);
         Calendar t2 = new GregorianCalendar(2021, 4, 9, 15, 0);
@@ -218,6 +218,32 @@ public class CalendarAppTest {
 
         assertEquals(14, testList.get(1)[0].get(Calendar.HOUR_OF_DAY));
         assertEquals(15, testList.get(1)[1].get(Calendar.HOUR_OF_DAY));
+    }
+    
+    @Test
+    public void testCommonMeetingTime2() {
+        ICalendarApp app = new CalendarApp();
+        app.calendarInit();
+        IUser user1 = app.addUser("amy");
+        IUser user2 = app.addUser("bob");
+
+        user1.addEvent("2021-5-10-10-0", "2021-5-10-13-0", "yoga", null);
+
+        user2.addEvent("2021-5-10-12-0", "2021-5-10-15-0", "yoga", null);
+
+        Calendar t1 = new GregorianCalendar(2021, 4, 10, 8, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4, 10, 20, 0);
+
+
+
+        List<Calendar[]> testList = app.findCommonMeetingTime(t1, t2);
+
+
+        assertEquals(8, testList.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(10, testList.get(0)[1].get(Calendar.HOUR_OF_DAY));
+
+        assertEquals(15, testList.get(1)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(20, testList.get(1)[1].get(Calendar.HOUR_OF_DAY));
     }
 
     @Test
