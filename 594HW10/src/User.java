@@ -34,7 +34,7 @@ public class User implements IUser {
     }
 
     @Override
-    public boolean addEvent(String startTime, String endTime, 
+    public boolean addEvent(String startTime, String endTime,
             String eventName, List<Integer> listAttendees) {
         try {
             IEvent event = new Event(startTime, endTime, eventName, listAttendees);
@@ -144,7 +144,7 @@ public class User implements IUser {
 
     /**
      * Check if two time are one the same day
-     * 
+     *
      * @param target
      * @param curr
      * @return
@@ -163,14 +163,14 @@ public class User implements IUser {
     /**
      * Helper function to modify the input time of the viewCalendarByWeek() to the
      * the Monday of that week
-     * 
+     *
      * @param dayInTargetWeek
      */
     protected static void mondayFinder(Calendar dayInTargetWeek) {
 
         // d = Calendar.get(Calendar.DAY_OF_WEEK)
         // (d + numberOfDaysInAWeek - firstDayOfWeek) % numberOfDaysInAWeek
-        int currentDayOfWeek = (dayInTargetWeek.get(Calendar.DAY_OF_WEEK) + 7 
+        int currentDayOfWeek = (dayInTargetWeek.get(Calendar.DAY_OF_WEEK) + 7
                 - dayInTargetWeek.getFirstDayOfWeek())
                 % 7;
         dayInTargetWeek.add(Calendar.DAY_OF_YEAR, -currentDayOfWeek);
@@ -212,7 +212,7 @@ public class User implements IUser {
             return null;
         }
         List<Calendar[]> list = new ArrayList<>();
-        
+
         if (this.events.size() == 0) {
             Calendar[] tuple = {startTime, endTime};
             list.add(tuple);
@@ -247,7 +247,7 @@ public class User implements IUser {
 
                 // otherwise, add the event between curr and next event
             } else {
-                Calendar[] tuple = { events.get(currIndex).getEndTime(), 
+                Calendar[] tuple = { events.get(currIndex).getEndTime(),
                         events.get(nextIndex).getStartTime() };
                 list.add(tuple);
             }
@@ -273,7 +273,7 @@ public class User implements IUser {
             int endHour = l.get(i)[1].get(Calendar.HOUR_OF_DAY);
 
             // check if start time and end time of the slot are in constraint bounds
-            boolean startInBound = startHour >= this.constraintStart 
+            boolean startInBound = startHour >= this.constraintStart
                     && startHour < this.constraintEnd;
             boolean endInBound = endHour >= this.constraintStart && endHour < this.constraintEnd;
 
@@ -301,7 +301,7 @@ public class User implements IUser {
 
     @Override
     public void printEvent(IEvent event) {
-        System.out.printf("%tR - %tR %s\n", event.getStartTime(), 
+        System.out.printf("%tR - %tR %s\n", event.getStartTime(),
                 event.getEndTime(), event.getEventName());
     }
 
@@ -364,19 +364,19 @@ public class User implements IUser {
         int days = dayInTargetWeek.get(Calendar.DAY_OF_MONTH);
 
         // print header
-        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n", 
+        System.out.printf("%s\n%60sWeek of %tB %<te, %<tY \n",
                 ICalendarApp.LINESEPARATE, " ", dayInTargetWeek);
         System.out.printf("%s\n%6s | %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d| %s - %-12d|\n",
-                ICalendarApp.LINESEPARATE, view[0][0], view[0][1], days, 
+                ICalendarApp.LINESEPARATE, view[0][0], view[0][1], days,
                 view[0][2], days + 1, view[0][3], days + 2,
-                view[0][4], days + 3, view[0][5], days + 4, 
+                view[0][4], days + 3, view[0][5], days + 4,
                 view[0][6], days + 5, view[0][7], days + 6);
 
         // each row of the weekly view
         for (int i = 1; i < 14; i++) {
-            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n", 
+            System.out.printf("%s\n%6s | %-18s| %-18s| %-18s| %-18s| %-18s| %-18s| %-18s|\n",
                     ICalendarApp.LINESEPARATE,
-                    view[i][0], view[i][1], view[i][2], view[i][3], 
+                    view[i][0], view[i][1], view[i][2], view[i][3],
                     view[i][4], view[i][5], view[i][6], view[i][7]);
         }
         System.out.println(ICalendarApp.LINESEPARATE);
@@ -386,7 +386,7 @@ public class User implements IUser {
     /**
      * Helper function to add hard-copies of event name within the week calendar
      * view to the view martix
-     * 
+     *
      * @param dayInTargetWeek
      * @param view
      */
@@ -436,7 +436,7 @@ public class User implements IUser {
                     if (viewEvents[j][i].size() == 1) {
                         // add "..." if the string to too long to display
                         if (viewEvents[j][i].get(0).length() > 14) {
-                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14) 
+                            view[j][i] = viewEvents[j][i].get(0).substring(0, 14)
                                     + ICalendarApp.ETC;
                         } else {
                             view[j][i] = new String(viewEvents[j][i].get(0));

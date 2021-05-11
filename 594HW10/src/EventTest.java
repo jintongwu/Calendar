@@ -38,8 +38,7 @@ public class EventTest {
         
         boolean caught = false;
         try {
-            e = new Event("1999-5-9-10-00", "2021-5-9-12-00", 
-                    "test event", new LinkedList<Integer>());
+            e = new Event("1999-5-9-10-00", "2021-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -47,8 +46,7 @@ public class EventTest {
         caught = false;
         
         try {
-            e = new Event("2021-5-9-10-00", "2111-5-9-12-00", 
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2021-5-9-10-00", "2111-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -80,8 +78,7 @@ public class EventTest {
         caught = false;
         
         try {
-            e = new Event("2011-13-9-10-00", "2011-5-9-12-00", 
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2011-13-9-10-00", "2011-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -89,8 +86,7 @@ public class EventTest {
         caught = false;
         
         try {
-            e = new Event("2011-1-32-10-00", "2011-5-9-12-00",
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2011-1-32-10-00", "2011-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -98,8 +94,7 @@ public class EventTest {
         caught = false;
         
         try {
-            e = new Event("2011-1-30-24-00", "2011-5-9-12-00",
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2011-1-30-24-00", "2011-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -107,8 +102,7 @@ public class EventTest {
         caught = false;
        
         try {
-            e = new Event("2011-1-30-1-60", "2011-5-9-12-00",
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2011-1-30-1-60", "2011-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -117,8 +111,7 @@ public class EventTest {
         
         
         try {
-            e = new Event("2021-5-10-10-00", "2021-5-9-12-00",
-                    "test event", new LinkedList<Integer>());
+            e = new Event("2021-5-10-10-00", "2021-5-9-12-00", "test event", new LinkedList<Integer>());
         } catch (IllegalArgumentException e) {
             caught = true;
         }
@@ -204,12 +197,9 @@ public class EventTest {
     
     @Test
     public void testCompareTo() {
-        Event e2 = new Event("2021-5-9-10-00", "2021-5-9-12-00",
-                "test event", new LinkedList<Integer>());
-        Event e3 = new Event("2021-5-9-10-00", "2021-5-10-12-00",
-                "test event", new LinkedList<Integer>());
-        Event e4 = new Event("2021-5-8-10-00", "2021-5-9-12-00", 
-                "test event", new LinkedList<Integer>());
+        Event e2 = new Event("2021-5-9-10-00", "2021-5-9-12-00", "test event", new LinkedList<Integer>());
+        Event e3 = new Event("2021-5-9-10-00", "2021-5-10-12-00", "test event", new LinkedList<Integer>());
+        Event e4 = new Event("2021-5-8-10-00", "2021-5-9-12-00", "test event", new LinkedList<Integer>());
         assertEquals(0, e2.compareTo(e));
         assertEquals(1, e3.compareTo(e));
         assertEquals(-1, e4.compareTo(e));
