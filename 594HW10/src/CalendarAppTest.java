@@ -219,7 +219,7 @@ public class CalendarAppTest {
         assertEquals(14, testList.get(1)[0].get(Calendar.HOUR_OF_DAY));
         assertEquals(15, testList.get(1)[1].get(Calendar.HOUR_OF_DAY));
     }
-    
+
     @Test
     public void testCommonMeetingTime2() {
         ICalendarApp app = new CalendarApp();
@@ -244,6 +244,52 @@ public class CalendarAppTest {
 
         assertEquals(15, testList.get(1)[0].get(Calendar.HOUR_OF_DAY));
         assertEquals(20, testList.get(1)[1].get(Calendar.HOUR_OF_DAY));
+    }
+
+    @Test
+    public void testCommonMeetingTime3() {
+        ICalendarApp app = new CalendarApp();
+        app.calendarInit();
+        IUser user1 = app.addUser("amy");
+        IUser user2 = app.addUser("bob");
+
+        user1.editStartConstraint(8);
+        user1.editEndConstraint(23);
+
+        user1.addEvent("2021-5-10-8-0", "2021-5-10-9-0", "yoga", null);
+
+        user2.addEvent("2021-5-10-22-0", "2021-5-11-2-0", "yoga", null);
+
+        Calendar t1 = new GregorianCalendar(2021, 4, 10, 7, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4, 11, 1, 0);
+
+
+        List<Calendar[]> testList = app.findCommonMeetingTime(t1, t2);
+
+        assertEquals(9, testList.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(22, testList.get(0)[1].get(Calendar.HOUR_OF_DAY));
+    }
+
+    @Test
+    public void testCommonMeetingTime4() {
+        ICalendarApp app = new CalendarApp();
+        app.calendarInit();
+        IUser user1 = app.addUser("amy");
+        app.addUser("bob");
+
+        user1.editStartConstraint(8);
+        user1.editEndConstraint(23);
+
+        user1.addEvent("2021-5-10-12-0", "2021-5-10-15-0", "yoga", null);
+        user1.addEvent("2021-5-10-15-0", "2021-5-10-20-0", "work", null);
+
+        Calendar t1 = new GregorianCalendar(2021, 4, 10, 8, 0);
+        Calendar t2 = new GregorianCalendar(2021, 4, 10, 17, 0);
+
+        List<Calendar[]> testList = app.findCommonMeetingTime(t1, t2);
+
+        assertEquals(8, testList.get(0)[0].get(Calendar.HOUR_OF_DAY));
+        assertEquals(12, testList.get(0)[1].get(Calendar.HOUR_OF_DAY));
     }
 
     @Test
