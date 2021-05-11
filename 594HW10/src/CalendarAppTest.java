@@ -272,7 +272,7 @@ public class CalendarAppTest {
         ICalendarApp app = new CalendarApp();
         app.calendarInit();
         IUser user1 = app.addUser("amy");
-        IUser user2 = app.addUser("bob");
+        app.addUser("bob");
         
         user1.editStartConstraint(8);
         user1.editEndConstraint(23);

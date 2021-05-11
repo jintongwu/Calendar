@@ -58,11 +58,25 @@ public interface IEvent extends Comparable<IEvent> {
      */
     public boolean changeDuration(int hours, int mins);
 
-
+    /**
+     * Get the start time of this event
+     * 
+     * @return a Calendar object representing the start time
+     */
     public Calendar getStartTime();
 
+    /**
+     * Get the end time of the event
+     * 
+     * @return a Calendar object representing the end time
+     */
     public Calendar getEndTime();
 
+    /**
+     * Get the name of the event
+     * 
+     * @return
+     */
     public String getEventName();
 
 }
